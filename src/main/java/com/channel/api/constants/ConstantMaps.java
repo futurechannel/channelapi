@@ -16,9 +16,9 @@ public class ConstantMaps {
     public static Set<String> advertSets=new HashSet<>();
 
     static {
-        appCodeMap.put("ele","com.ele");
+        appCodeMap.put("manguo","629774477");
 
-        appIdMap.put("com.ele","ele");
+        appIdMap.put("629774477","manguo");
 
         advertSets.add("ppApp_1374");
         advertSets.add("xyApp_8739");
