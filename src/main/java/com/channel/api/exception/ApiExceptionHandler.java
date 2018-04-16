@@ -19,7 +19,7 @@ public class ApiExceptionHandler {
 
 
     @ExceptionHandler(ApiException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public BaseResult handleInvalidRequestError(ApiException ex) {
         return new BaseResult(Integer.parseInt(ex.getMessage()));

@@ -58,6 +58,8 @@ public class ReportLogController extends BaseController{
             throw new ApiException(ErrorCode.E500.getCode()+"");
         }
 
+
+
         return new BaseResult(ErrorCode.E200);
     }
 }

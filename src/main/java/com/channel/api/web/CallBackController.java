@@ -20,8 +20,8 @@ public class CallBackController {
     @ResponseBody
     public BaseResult callBackEle(@PathVariable String app, @Valid EleBackForm form){
 
-
         BaseResult result=new BaseResult();
+
         return result;
     }
 

@@ -15,10 +15,9 @@
     </bean>
 
     <bean id="callBackJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject">
-            <bean class="com.channel.api.job.CallBackJob"/>
-        </property>
+        <property name="targetObject" ref="callBackJob"/>
         <property name="targetMethod" value="callback"/>
+        <property name="concurrent" value="false"/>
     </bean>
 
     <bean id="callBackJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
