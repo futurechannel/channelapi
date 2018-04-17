@@ -35,7 +35,7 @@ public class CallBackController extends BaseController {
     @Autowired
     private CallBackService callBackService;
 
-    @RequestMapping(value = "/app", produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/app")
     @ResponseBody
     public BaseResult callBackEle(@Valid EleBackForm form) {
 
