@@ -10,6 +10,8 @@ public class EleBackForm {
     private String idfa;
     private String click_id;
     private String user_ip;
+    @NotEmpty
+    private String appcode;
 
     public String getIdfa() {
         return idfa;
@@ -33,5 +35,13 @@ public class EleBackForm {
 
     public void setUser_ip(String user_ip) {
         this.user_ip = user_ip;
+    }
+
+    public String getAppcode() {
+        return appcode;
+    }
+
+    public void setAppcode(String appcode) {
+        this.appcode = appcode;
     }
 }

@@ -16,11 +16,13 @@ import javax.validation.Valid;
 @RequestMapping("/callback")
 public class CallBackController {
 
-    @RequestMapping(value = "/{app}", produces = { "application/json;charset=UTF-8" })
+    @RequestMapping(value = "/app", produces = { "application/json;charset=UTF-8" })
     @ResponseBody
-    public BaseResult callBackEle(@PathVariable String app, @Valid EleBackForm form){
+    public BaseResult callBackEle(@Valid EleBackForm form){
 
         BaseResult result=new BaseResult();
+
+
 
         return result;
     }

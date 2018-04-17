@@ -26,4 +26,9 @@ public class CallBackServiceImpl implements CallBackService {
     public int updateStatus(CallbackLog callbackLog) {
         return callbackDao.updateStatus(callbackLog);
     }
+
+    @Override
+    public int insertCallBack(CallbackLog callbackLog) {
+        return callbackDao.insertCallBack(callbackLog);
+    }
 }

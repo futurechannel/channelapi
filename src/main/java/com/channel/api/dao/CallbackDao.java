@@ -15,4 +15,6 @@ public interface CallbackDao {
 
     int updateStatus(CallbackLog callbackLog);
 
+    int insertCallBack(CallbackLog callbackLog);
+
 }

@@ -13,4 +13,6 @@ public interface CallBackService {
     List<CallbackLog> findList(CallbackLog log,Date startTime, Date endTime,int offset,int limit);
 
     int updateStatus(CallbackLog callbackLog);
+
+    int insertCallBack(CallbackLog callbackLog);
 }

@@ -20,9 +20,14 @@ public class ConstantMaps {
 
         appIdMap.put("629774477","manguo");
 
-        advertSets.add("ppApp_1374");
-        advertSets.add("xyApp_8739");
-        advertSets.add("haimaApp_2349");
+        advertSets.add("pp_001");
+        advertSets.add("xy_001");
+        advertSets.add("haima_001");
+        advertSets.add("taken_001");
+        advertSets.add("51bizhi_001");
+        advertSets.add("aisi_001");
+        advertSets.add("mopin_001");
+        advertSets.add("23zhushou_001");
     }
 
     public static String getAppId(String code){
