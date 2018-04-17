@@ -10,4 +10,6 @@ public interface ReportLogService {
 
     int insert(ReportLog log);
 
+    ReportLog findById(String idfa,String appcode);
+
 }

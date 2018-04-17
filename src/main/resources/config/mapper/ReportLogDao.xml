@@ -22,5 +22,11 @@
 		VALUES (#{log.idfa}, #{log.adverterCode}, #{log.appCode}, #{log.clickId},#{log.callback}, #{log.reportTime})
 	</insert>
 
+	<select id="findById" resultType="reportLog">
+		SELECT *
+		FROM ${tableName}
+		WHERE idfa=#{id} AND app_code=#{app} limit 1;
+	</select>
+
 
 </mapper>

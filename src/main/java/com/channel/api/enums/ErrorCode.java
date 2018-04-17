@@ -8,7 +8,9 @@ public enum ErrorCode {
     E500(500, "系统错误"),
 
     E601(601, "appId不存在"),
-    E602(602, "ref不存在");
+    E602(602, "ref不存在"),
+
+    E801(801, "appcode不存在");
 
     private int code;
     private String msg;
