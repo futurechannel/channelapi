@@ -62,6 +62,16 @@ public class ReportLogDaoTest {
     }
 
     @Test
+    public void findById() throws Exception{
+        ReportLog log=reportLogDao.findById("1","ele","report_log");
+        if(log!=null){
+            System.out.println(log);
+        }
+
+        System.out.println("--------------------------");
+    }
+
+    @Test
     public void insert() throws Exception{
         ReportLog log=new ReportLog();
         log.setIdfa("dasdas");

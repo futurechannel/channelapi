@@ -39,4 +39,10 @@ public class ReportLogServiceImpl implements ReportLogService {
         return count;
     }
 
+    @Override
+    public ReportLog findById(String idfa, String appcode) {
+
+        return reportLogDao.findById(idfa,appcode,"report_log");
+    }
+
 }

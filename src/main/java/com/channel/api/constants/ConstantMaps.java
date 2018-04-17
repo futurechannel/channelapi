@@ -1,6 +1,8 @@
 package com.channel.api.constants;
 
 
+import com.channel.api.util.ConfigUtils;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,14 +22,10 @@ public class ConstantMaps {
 
         appIdMap.put("629774477","manguo");
 
-        advertSets.add("pp_001");
-        advertSets.add("xy_001");
-        advertSets.add("haima_001");
-        advertSets.add("taken_001");
-        advertSets.add("51bizhi_001");
-        advertSets.add("aisi_001");
-        advertSets.add("mopin_001");
-        advertSets.add("23zhushou_001");
+
+        for(String ref:ConfigUtils.getValue("channel.ref.list").split(",")){
+            advertSets.add(ref);
+        }
     }
 
     public static String getAppId(String code){

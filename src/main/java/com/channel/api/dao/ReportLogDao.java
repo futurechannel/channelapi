@@ -14,4 +14,6 @@ public interface ReportLogDao {
 
     List<ReportLog> queryAll(@Param("offset") int offset, @Param("limit") int limit);
 
+    ReportLog findById(@Param("id") String id,@Param("app") String app,@Param("tableName") String tableName);
+
 }
