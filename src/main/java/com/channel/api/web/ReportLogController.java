@@ -83,7 +83,7 @@ public class ReportLogController extends BaseController{
             callback = URLEncoder.encode("http://60.205.231.1:8080/channelapi/callback/app?"
                     + "idfa=" + idfa + URL_PARAM_SEPARATOR + "appcode="+ appCode + posParam, "utf-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            logger.error("encode 转码错误",e);
         }
 
         //转发请求给应用
@@ -99,12 +99,15 @@ public class ReportLogController extends BaseController{
             HttpClient httpClient = new HttpClient();
             GetMethod method = new GetMethod(url);
             method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, 5);
+
+            int resCode=-1;
+            String resStr=null;
             try {
-                int resCode = httpClient.executeMethod(method);
-                String resStr = method.getResponseBodyAsString();
+                 resCode = httpClient.executeMethod(method);
+                 resStr = method.getResponseBodyAsString();
                 logger.info("Forwarding request:[" + "resCode:"+ resCode + " resStr:" + resStr +"]");
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("上报应用异常,resCode:"+resCode+"resStr:"+resStr,e);
             }
         }else {
             logger.info("Forwarding request param error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + "]");

@@ -14,6 +14,7 @@ public final class DateUtils {
      */
     public static final String C_TIME_PATTON_DEFAULT = "yyyy-MM-dd HH:mm:ss";
     public static final String C_DATE_PATTON_DEFAULT = "yyyy-MM-dd";
+    public static final String C_DATE_PATTON_YYYYMMDD = "yyyyMMdd";
 
     public static final int C_ONE_SECOND = 1000;
     public static final int C_ONE_MINUTE = 60 * C_ONE_SECOND;
@@ -186,6 +187,10 @@ public final class DateUtils {
             }
         }
         return result;
+    }
+
+    public static String getDateStrYYYYMMdd(){
+        return formatDate2Str(new Date(),C_DATE_PATTON_YYYYMMDD);
     }
 
     /**

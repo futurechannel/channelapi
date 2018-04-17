@@ -4,6 +4,8 @@ import com.channel.api.dao.ReportLogDao;
 import com.channel.api.entity.ReportLog;
 import com.channel.api.service.ReportLogService;
 
+import com.channel.api.util.ConfigUtils;
+import com.channel.api.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +28,11 @@ public class ReportLogServiceImpl implements ReportLogService {
 
     @Override
     public int insert(ReportLog log) {
+        String tableName= getReportTableName();
+
         int count;
         try {
-            count=reportLogDao.insert(log,"report_log");
+            count=reportLogDao.insert(log,tableName);
         } catch(DuplicateKeyException e){
             LOG.error("主键冲突:"+log.toString());
             return 0;
@@ -42,7 +46,12 @@ public class ReportLogServiceImpl implements ReportLogService {
     @Override
     public ReportLog findById(String idfa, String appcode) {
 
-        return reportLogDao.findById(idfa,appcode,"report_log");
+        String tableName=getReportTableName();
+        return reportLogDao.findById(idfa,appcode,tableName);
+    }
+
+    private String getReportTableName(){
+        return ConfigUtils.getValue("report.table.prefix")+DateUtils.getDateStrYYYYMMdd();
     }
 
 }
