@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 
 /**
  * Created by gq on 2018/4/13.
@@ -34,24 +38,47 @@ public class ReportLogServiceImpl implements ReportLogService {
         try {
             count=reportLogDao.insert(log,tableName);
         } catch(DuplicateKeyException e){
-            LOG.error("主键冲突:"+log.toString());
             return 0;
         } catch (Exception e){
             LOG.error("保存失败:"+log.toString(),e);
-            return 0;
+            return -1;
         }
         return count;
     }
 
+    /**
+     * 查最近两天的上报记录
+     * @param idfa
+     * @param appcode
+     * @return
+     */
     @Override
     public ReportLog findById(String idfa, String appcode) {
 
-        String tableName=getReportTableName();
-        return reportLogDao.findById(idfa,appcode,tableName);
+        List<String> tableNames=getReportTableNames();
+
+        ReportLog log=null;
+        for(String tableName:tableNames){
+            log=reportLogDao.findById(idfa,appcode,tableName);
+            if(log!=null){
+                return log;
+            }
+        }
+
+        return log;
     }
 
     private String getReportTableName(){
-        return ConfigUtils.getValue("report.table.prefix")+DateUtils.getDateStrYYYYMMdd();
+       return ConfigUtils.getValue("report.table.prefix")+DateUtils.getDateStrYYYYMMdd();
+    }
+
+    private List<String> getReportTableNames(){
+        Date date=new Date();
+        List<String> tables=new ArrayList<>();
+        tables.add(ConfigUtils.getValue("report.table.prefix")+DateUtils.formatDate2Str(date,DateUtils.C_DATE_PATTON_YYYYMMDD));
+        tables.add(ConfigUtils.getValue("report.table.prefix")+DateUtils.defineDayBefore2Str(date,-1,DateUtils.C_DATE_PATTON_YYYYMMDD));
+
+        return tables;
     }
 
 }
