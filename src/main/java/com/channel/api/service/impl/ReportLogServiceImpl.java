@@ -1,5 +1,6 @@
 package com.channel.api.service.impl;
 
+import com.channel.api.constants.ConstantMaps;
 import com.channel.api.dao.ReportLogDao;
 import com.channel.api.entity.ReportLog;
 import com.channel.api.service.ReportLogService;
@@ -32,7 +33,7 @@ public class ReportLogServiceImpl implements ReportLogService {
 
     @Override
     public int insert(ReportLog log) {
-        String tableName= getReportTableName();
+        String tableName= ConstantMaps.getReportTableName();
 
         int count;
         try {
@@ -55,7 +56,7 @@ public class ReportLogServiceImpl implements ReportLogService {
     @Override
     public ReportLog findById(String idfa, String appcode) {
 
-        List<String> tableNames=getReportTableNames();
+        List<String> tableNames=ConstantMaps.getReportTableNames();
 
         ReportLog log=null;
         for(String tableName:tableNames){
@@ -68,17 +69,5 @@ public class ReportLogServiceImpl implements ReportLogService {
         return log;
     }
 
-    private String getReportTableName(){
-       return ConfigUtils.getValue("report.table.prefix")+DateUtils.getDateStrYYYYMMdd();
-    }
-
-    private List<String> getReportTableNames(){
-        Date date=new Date();
-        List<String> tables=new ArrayList<>();
-        tables.add(ConfigUtils.getValue("report.table.prefix")+DateUtils.formatDate2Str(date,DateUtils.C_DATE_PATTON_YYYYMMDD));
-        tables.add(ConfigUtils.getValue("report.table.prefix")+DateUtils.defineDayBefore2Str(date,-1,DateUtils.C_DATE_PATTON_YYYYMMDD));
-
-        return tables;
-    }
 
 }

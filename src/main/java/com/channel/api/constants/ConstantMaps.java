@@ -3,12 +3,10 @@ package com.channel.api.constants;
 
 import com.channel.api.entity.AppInfo;
 import com.channel.api.util.ConfigUtils;
+import com.channel.api.util.DateUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by gq on 2018/4/15.
@@ -21,6 +19,11 @@ public class ConstantMaps {
 
     public static Map<String, Integer> balanceMap = new HashMap<>();
 
+    public static List<String> reportTables=new ArrayList<>();
+
+    public static void setReportTables(List<String> reportTables) {
+        ConstantMaps.reportTables = reportTables;
+    }
 
     public static void setAppCodeMap(Map<String, String> appCodeMap) {
         ConstantMaps.appCodeMap = appCodeMap;
@@ -67,5 +70,13 @@ public class ConstantMaps {
 
     public static String getBalanceKey(String appCode, String advertCode) {
         return advertCode + "-" + appCode;
+    }
+
+    public static String getReportTableName(){
+        return reportTables.get(0);
+    }
+
+    public static List<String> getReportTableNames(){
+        return reportTables;
     }
 }

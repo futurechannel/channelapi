@@ -5,6 +5,8 @@ import com.channel.api.dao.AdvertInfoDao;
 import com.channel.api.dao.AppInfoDao;
 import com.channel.api.entity.AdvertInfo;
 import com.channel.api.entity.AppInfo;
+import com.channel.api.util.ConfigUtils;
+import com.channel.api.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +43,16 @@ public class ConfigJob {
         LOG.info("@Scheduled-----refreshConfig()");
         Map<String,AppInfo> tmpAppIdMap=new HashMap<>();
         Map<String,String> tmpAppCodeMap=new HashMap<>();
-        Set<String> tmpAdvertSets=new HashSet<>();
 
+        Set<String> tmpAdvertSets=new HashSet<>();
         Map<String,Integer> tmpBalanceMap=new HashMap<>();
+
+
+        List<String> tmpReportTables=new ArrayList<>();
+        Date date=new Date();
+        tmpReportTables.add(ConfigUtils.getValue("report.table.prefix")+ DateUtils.formatDate2Str(date,DateUtils.C_DATE_PATTON_YYYYMMDD));
+        tmpReportTables.add(ConfigUtils.getValue("report.table.prefix")+DateUtils.defineDayBefore2Str(date,-1,DateUtils.C_DATE_PATTON_YYYYMMDD));
+        ConstantMaps.setReportTables(tmpReportTables);
 
 
         List<AppInfo> appInfos=appInfoDao.findAll();
