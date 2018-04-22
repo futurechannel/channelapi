@@ -126,7 +126,7 @@ public class ReportLogController extends BaseController{
 
         int i=logService.insert(log);
 
-        if(i<1){
+        if(i<0){
             throw new ApiException(ErrorCode.E500.getCode()+"");
         }
 

@@ -19,6 +19,8 @@ PRIMARY KEY (`adverter_code`,`app_code`)
 CREATE TABLE app_info(
 `app_code` VARCHAR(50) NOT NULL  COMMENT '应用标识',
 `app_name` VARCHAR(100) NOT NULL COMMENT '应用名',
+`app_id` VARCHAR(50) NOT NULL COMMENT '应用id',
+`report_url` VARCHAR(500) NOT NULL COMMENT '上报地址',
 `token` VARCHAR(50) COMMENT '校验token',
 `come_from` VARCHAR(50)  COMMENT '渠道标识',
 `callback_url` VARCHAR(500) COMMENT '回调地址',

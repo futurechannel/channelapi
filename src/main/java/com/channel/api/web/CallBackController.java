@@ -64,8 +64,9 @@ public class CallBackController extends BaseController {
             callbackLog.setCallback(log.getCallback());
             callbackLog.setAdverterCode(log.getAdverterCode());
             callbackLog.setIsCall(0);
+
             //扣量逻辑,产生一个1-100的随机数,<=per表示需要回调
-            callbackLog.setIsBalance(NumUtils.randBoolean(1,100, Integer.parseInt(ConfigUtils.getValue("mangguo.reduce.per"))));
+            callbackLog.setIsBalance(NumUtils.randBoolean(1,100, ConstantMaps.getBalanceRatio(appCode,log.getAdverterCode())));
 
         }
 
