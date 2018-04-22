@@ -1,6 +1,7 @@
 package com.channel.api.constants;
 
 
+import com.channel.api.entity.AppInfo;
 import com.channel.api.util.ConfigUtils;
 import org.springframework.util.StringUtils;
 
@@ -14,7 +15,7 @@ import java.util.Set;
  */
 public class ConstantMaps {
     public static Map<String, String> appCodeMap = new HashMap<>();
-    public static Map<String, String> appIdMap = new HashMap<>();
+    public static Map<String, AppInfo> appIdMap = new HashMap<>();
 
     public static Set<String> advertSets = new HashSet<>();
 
@@ -25,7 +26,7 @@ public class ConstantMaps {
         ConstantMaps.appCodeMap = appCodeMap;
     }
 
-    public static void setAppIdMap(Map<String, String> appIdMap) {
+    public static void setAppIdMap(Map<String, AppInfo> appIdMap) {
         ConstantMaps.appIdMap = appIdMap;
     }
 
@@ -44,7 +45,7 @@ public class ConstantMaps {
         return null;
     }
 
-    public static String getAppCode(String appId) {
+    public static AppInfo getAppCode(String appId) {
         if (appIdMap.containsKey(appId)) {
             return appIdMap.get(appId);
         }

@@ -3,24 +3,21 @@ package com.channel.api.web;
 import com.channel.api.base.BaseController;
 import com.channel.api.constants.ConstantMaps;
 import com.channel.api.dto.BaseResult;
+import com.channel.api.entity.AppInfo;
 import com.channel.api.entity.ReportLog;
 import com.channel.api.enums.ErrorCode;
 import com.channel.api.exception.ApiException;
 import com.channel.api.form.ReportLogForm;
-import com.channel.api.handler.CallBackHandler;
 import com.channel.api.service.ReportLogService;
 import com.channel.api.util.ConfigUtils;
 import com.channel.api.util.GsonUtils;
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -40,12 +37,6 @@ public class ReportLogController extends BaseController{
 
     public static final String URL_PARAM_SEPARATOR="&";
 
-    @Autowired
-    private CallBackHandler handler;
-
-    @Autowired
-    private RestTemplate template;
-
 
     @Resource
     private ReportLogService logService;
@@ -60,11 +51,15 @@ public class ReportLogController extends BaseController{
         String pos = form.getClickid();
         String ip = form.getIp();
         String ua = form.getUserAgent();
-        String appCode= ConstantMaps.getAppCode(form.getAppid());
-        if(StringUtils.isEmpty(appCode)){
+
+        AppInfo appInfo= ConstantMaps.getAppCode(form.getAppid());
+
+        if(appInfo==null){
             throw new ApiException(ErrorCode.E601.getCode()+"");
         }
-        String from = ConfigUtils.getValueNe("from");
+        String appCode=appInfo.getAppCode();
+        String from = appInfo.getComeFrom();
+
         String callback = null;
 
         String posParam = "";
@@ -87,14 +82,12 @@ public class ReportLogController extends BaseController{
         }
 
         //转发请求给应用
-        if ( !StringUtils.isEmpty(idfa) && !StringUtils.isEmpty(from) && !StringUtils.isEmpty(callback)){
-            String url = ConfigUtils.getValueNe(appCode)
+        if ( !StringUtils.isEmpty(idfa) && !StringUtils.isEmpty(from) && !StringUtils.isEmpty(callback) && !StringUtils.isEmpty(appCode)){
+            String url = appInfo.getReportUrl()
                     + "idfa=" + idfa + URL_PARAM_SEPARATOR + "from=" + from + URL_PARAM_SEPARATOR + "callback=" + callback
                     + posParam
                     + ipParam
                     + uaParam;
-
-            logger.info("Forwarding request url:" + url);
 
             HttpClient httpClient = new HttpClient();
             GetMethod method = new GetMethod(url);
@@ -105,12 +98,12 @@ public class ReportLogController extends BaseController{
             try {
                  resCode = httpClient.executeMethod(method);
                  resStr = method.getResponseBodyAsString();
-                logger.info("Forwarding request:[" + "resCode:"+ resCode + " resStr:" + resStr +"]");
+                logger.info("Forwarding request:[" + "resCode:"+ resCode + " resStr:" + resStr +"url:"+url+"]");
             } catch (IOException e) {
-                logger.error("上报应用异常,resCode:"+resCode+"resStr:"+resStr,e);
+                logger.error("上报应用异常,resCode:"+resCode+"resStr:"+resStr+"url:"+url,e);
             }
         }else {
-            logger.info("Forwarding request param error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + "]");
+            logger.error("Forwarding request param error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + "]");
         }
 
         //上报记录入库

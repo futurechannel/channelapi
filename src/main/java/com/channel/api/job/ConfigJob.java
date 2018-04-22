@@ -39,7 +39,7 @@ public class ConfigJob {
     @Scheduled(cron = "0 0/5 * * * ? ")
     public void refreshConfig() {
         LOG.info("@Scheduled-----refreshConfig()");
-        Map<String,String> tmpAppIdMap=new HashMap<>();
+        Map<String,AppInfo> tmpAppIdMap=new HashMap<>();
         Map<String,String> tmpAppCodeMap=new HashMap<>();
         Set<String> tmpAdvertSets=new HashSet<>();
 
@@ -51,7 +51,7 @@ public class ConfigJob {
 
         for(AppInfo appInfo:appInfos){
             tmpAppCodeMap.put(appInfo.getAppCode(),appInfo.getAppId());
-            tmpAppIdMap.put(appInfo.getAppId(),appInfo.getAppCode());
+            tmpAppIdMap.put(appInfo.getAppId(),appInfo);
         }
 
         for(AdvertInfo advertInfo:advertInfos){
