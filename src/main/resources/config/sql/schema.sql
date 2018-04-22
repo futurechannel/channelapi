@@ -70,5 +70,9 @@ CREATE TABLE balance_amount(
 )ENGINE=INNODB  DEFAULT CHARSET=utf8 COMMENT='结算表';
 
 
+CREATE INDEX index_callback_call ON callback_log (is_call);
+CREATE INDEX index_callback_balance ON callback_log (is_balance);
+CREATE INDEX index_callback_create ON callback_log (create_time);
+
 
 

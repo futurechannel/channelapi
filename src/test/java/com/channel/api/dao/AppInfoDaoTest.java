@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
+
 import static org.junit.Assert.*;
 
 /**
@@ -21,8 +23,9 @@ public class AppInfoDaoTest {
 
     @Test
     public void findAll() throws Exception {
+        long start=new Date().getTime();
         System.out.println(appInfoDao.findAll());
-        System.out.println("======");
+        System.out.println("======"+(new Date().getTime()-start)/1000d);
     }
 
     @Test

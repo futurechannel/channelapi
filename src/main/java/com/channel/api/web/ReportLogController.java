@@ -3,17 +3,15 @@ package com.channel.api.web;
 import com.channel.api.base.BaseController;
 import com.channel.api.constants.ConstantMaps;
 import com.channel.api.dto.BaseResult;
+import com.channel.api.dto.MangguoDto;
 import com.channel.api.entity.AppInfo;
 import com.channel.api.entity.ReportLog;
 import com.channel.api.enums.ErrorCode;
 import com.channel.api.exception.ApiException;
 import com.channel.api.form.ReportLogForm;
 import com.channel.api.service.ReportLogService;
-import com.channel.api.util.ConfigUtils;
 import com.channel.api.util.GsonUtils;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
+import com.channel.api.util.HttpClientUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +43,8 @@ public class ReportLogController extends BaseController{
     @ResponseBody
     public BaseResult upReport(@Valid ReportLogForm form){
 
-        logger.info("req:["+GsonUtils.pojoToJson(form)+"]");
+
+        logger.debug("req:["+GsonUtils.pojoToJson(form)+"]");
 
         String idfa = form.getIdfa();
         String pos = form.getClickid();
@@ -81,6 +80,8 @@ public class ReportLogController extends BaseController{
             logger.error("encode 转码错误",e);
         }
 
+        long start=new Date().getTime();
+
         //转发请求给应用
         if ( !StringUtils.isEmpty(idfa) && !StringUtils.isEmpty(from) && !StringUtils.isEmpty(callback) && !StringUtils.isEmpty(appCode)){
             String url = appInfo.getReportUrl()
@@ -89,22 +90,22 @@ public class ReportLogController extends BaseController{
                     + ipParam
                     + uaParam;
 
-            HttpClient httpClient = new HttpClient();
-            GetMethod method = new GetMethod(url);
-            method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, 5);
-
-            int resCode=-1;
-            String resStr=null;
-            try {
-                 resCode = httpClient.executeMethod(method);
-                 resStr = method.getResponseBodyAsString();
-                logger.info("Forwarding request:[" + "resCode:"+ resCode + " resStr:" + resStr +"url:"+url+"]");
-            } catch (IOException e) {
-                logger.error("上报应用异常,resCode:"+resCode+"resStr:"+resStr+"url:"+url,e);
+            String resStr=HttpClientUtil.httpGet(url);
+            if(StringUtils.isEmpty(resStr)){
+                logger.error("report error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + "]");
+                throw new ApiException(ErrorCode.E901.getCode()+"");
             }
+            MangguoDto mangguoDto=GsonUtils.jsonToPojo(resStr,MangguoDto.class);
+            if(!mangguoDto.getRet().equals("0")){
+                logger.error("report error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + "]");
+                throw new ApiException(ErrorCode.E901.getCode()+"");
+            }
+            logger.info("Forwarding request:[" + " resStr:" + resStr +"url:"+url+"]");
         }else {
             logger.error("Forwarding request param error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + "]");
         }
+
+//        logger.info("report耗时:"+(new Date().getTime()-start)+"ms");
 
         //上报记录入库
         ReportLog log=new ReportLog();
@@ -123,6 +124,7 @@ public class ReportLogController extends BaseController{
             throw new ApiException(ErrorCode.E500.getCode()+"");
         }
 
+        logger.info("总耗时:"+(new Date().getTime()-start)+"ms");
         return new BaseResult(ErrorCode.E200);
     }
 }
