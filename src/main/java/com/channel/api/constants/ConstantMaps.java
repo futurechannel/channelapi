@@ -18,9 +18,9 @@ public class ConstantMaps {
     public static Set<String> advertSets=new HashSet<>();
 
     static {
-        appCodeMap.put("manguo","629774477");
+        appCodeMap.put("mangguo","629774477");
 
-        appIdMap.put("629774477","manguo");
+        appIdMap.put("629774477","mangguo");
 
 
         for(String ref:ConfigUtils.getValue("channel.ref.list").split(",")){

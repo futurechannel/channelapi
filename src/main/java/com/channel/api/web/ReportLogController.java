@@ -89,8 +89,7 @@ public class ReportLogController extends BaseController{
         //转发请求给应用
         if ( !StringUtils.isEmpty(idfa) && !StringUtils.isEmpty(from) && !StringUtils.isEmpty(callback)){
             String url = ConfigUtils.getValueNe(appCode)
-                    + "idfa=" + idfa + URL_PARAM_SEPARATOR + "from=" + from + URL_PARAM_SEPARATOR + "callback=" + callback
-                    + posParam
+                    + "idfa=" + idfa + URL_PARAM_SEPARATOR + "from=" + from + URL_PARAM_SEPARATOR + "callback=" + callback + URL_PARAM_SEPARATOR + "pos=" + 0
                     + ipParam
                     + uaParam;
 
@@ -126,7 +125,7 @@ public class ReportLogController extends BaseController{
 
         int i=logService.insert(log);
 
-        if(i<1){
+        if(i<0){
             throw new ApiException(ErrorCode.E500.getCode()+"");
         }
 
