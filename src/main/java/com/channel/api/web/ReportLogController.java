@@ -85,8 +85,7 @@ public class ReportLogController extends BaseController{
         //转发请求给应用
         if ( !StringUtils.isEmpty(idfa) && !StringUtils.isEmpty(from) && !StringUtils.isEmpty(callback) && !StringUtils.isEmpty(appCode)){
             String url = appInfo.getReportUrl()
-                    + "idfa=" + idfa + URL_PARAM_SEPARATOR + "from=" + from + URL_PARAM_SEPARATOR + "callback=" + callback
-                    + posParam
+                    + "idfa=" + idfa + URL_PARAM_SEPARATOR + "from=" + from + URL_PARAM_SEPARATOR + "callback=" + callback + URL_PARAM_SEPARATOR +  "pos=0"
                     + ipParam
                     + uaParam;
 
