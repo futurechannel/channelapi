@@ -46,7 +46,7 @@ public class CallBackHandler {
             return Constants.CALL_BACK_FAIL;
         }
 
-        return rsp.getStatus()==1?Constants.CALL_BACK_SUC:Constants.CALL_BACK_FAIL;
+        return rsp!=null&&rsp.getStatus()==1?Constants.CALL_BACK_SUC:Constants.CALL_BACK_FAIL;
     }
 
 }

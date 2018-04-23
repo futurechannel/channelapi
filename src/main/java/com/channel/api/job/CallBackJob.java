@@ -35,7 +35,8 @@ public class CallBackJob {
         log.setIsBalance(1);
         log.setIsCall(0);
 
-        while (true) {
+        //一次任务最多取二十页
+        for (int i=0;i<30;i++) {
 
             List<CallbackLog> list = callBackService.findList(log, start, end, 0, 20);
             if (CollectionUtils.isEmpty(list)) {
@@ -44,7 +45,13 @@ public class CallBackJob {
             }
 
             for (CallbackLog item : list) {
-                String result = handler.callBack(item.getCallback());
+                String result;
+                try {
+                    result = handler.callBack(item.getCallback());
+                }catch (Exception e){
+                    LOG.error("回调渠道接口异常");
+                    result=Constants.CALL_BACK_FAIL;
+                }
 
                 CallbackLog param = new CallbackLog();
                 param.setIdfa(item.getIdfa());
