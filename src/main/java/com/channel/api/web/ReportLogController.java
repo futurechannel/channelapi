@@ -44,7 +44,7 @@ public class ReportLogController extends BaseController{
     public BaseResult upReport(@Valid ReportLogForm form){
 
 
-        logger.debug("req:["+GsonUtils.pojoToJson(form)+"]");
+        logger.info("req:["+GsonUtils.pojoToJson(form)+"]");
 
         String idfa = form.getIdfa();
         String pos = form.getClickid();
