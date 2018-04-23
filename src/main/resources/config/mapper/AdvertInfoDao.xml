@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.channel.api.dao.AdvertInfoDao">
+    <resultMap id="advertInfo" type="AdvertInfo">
+        <id property="adverterCode" column="adverter_code"/>
+        <id property="appCode" column="app_code"/>
+        <id property="adverterName" column="adverter_name"/>
+        <id property="balanceRatio" column="balance_ratio"/>
+    </resultMap>
+
+    <select id="findAll" resultType="advertInfo">
+		SELECT *
+		FROM advert_info
+		limit 0,3000
+	</select>
+
+</mapper>

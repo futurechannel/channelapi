@@ -1,0 +1,37 @@
+package com.channel.api.dao;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.Date;
+
+import static org.junit.Assert.*;
+
+/**
+ * Created by gq on 2018/4/22.
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:config/spring/spring-dao.xml")
+public class AppInfoDaoTest {
+    @Autowired
+    private AppInfoDao appInfoDao;
+    @Autowired
+    private AdvertInfoDao advertInfoDao;
+
+    @Test
+    public void findAll() throws Exception {
+        long start=new Date().getTime();
+        System.out.println(appInfoDao.findAll());
+        System.out.println("======"+(new Date().getTime()-start)/1000d);
+    }
+
+    @Test
+    public void findAllAdv() throws Exception {
+        System.out.println(advertInfoDao.findAll());
+        System.out.println("======");
+    }
+
+}

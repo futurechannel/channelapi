@@ -1,5 +1,6 @@
 package com.channel.api.service.impl;
 
+import com.channel.api.constants.ConstantMaps;
 import com.channel.api.dao.ReportLogDao;
 import com.channel.api.entity.ReportLog;
 import com.channel.api.service.ReportLogService;
@@ -11,6 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -28,30 +33,41 @@ public class ReportLogServiceImpl implements ReportLogService {
 
     @Override
     public int insert(ReportLog log) {
-        String tableName= getReportTableName();
+        String tableName= ConstantMaps.getReportTableName();
 
         int count;
         try {
             count=reportLogDao.insert(log,tableName);
         } catch(DuplicateKeyException e){
-            LOG.error("主键冲突:"+log.toString());
             return 0;
         } catch (Exception e){
             LOG.error("保存失败:"+log.toString(),e);
-            return 0;
+            return -1;
         }
         return count;
     }
 
+    /**
+     * 查最近两天的上报记录
+     * @param idfa
+     * @param appcode
+     * @return
+     */
     @Override
     public ReportLog findById(String idfa, String appcode) {
 
-        String tableName=getReportTableName();
-        return reportLogDao.findById(idfa,appcode,tableName);
+        List<String> tableNames=ConstantMaps.getReportTableNames();
+
+        ReportLog log=null;
+        for(String tableName:tableNames){
+            log=reportLogDao.findById(idfa,appcode,tableName);
+            if(log!=null){
+                return log;
+            }
+        }
+
+        return log;
     }
 
-    private String getReportTableName(){
-        return ConfigUtils.getValue("report.table.prefix")+DateUtils.getDateStrYYYYMMdd();
-    }
 
 }

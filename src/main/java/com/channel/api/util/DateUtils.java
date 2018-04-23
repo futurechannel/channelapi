@@ -415,6 +415,11 @@ public final class DateUtils {
         return defineDayBefore2Object(date, days, null, stringInstance);
     }
 
+    public static String defineDayBefore2Str(Date date, int days,String format) {
+        String stringInstance = formatDate2Str();
+        return defineDayBefore2Object(date, days, format, stringInstance);
+    }
+
     /**
      * 相对于指定日期的前几天(days < 0０００００)或者后几天(days > 0)
      *
