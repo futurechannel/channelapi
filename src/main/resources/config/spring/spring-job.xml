@@ -13,6 +13,7 @@
         <property name="triggers">
             <list>
                 <ref bean="callBackJobTrigger"/>
+                <ref bean="failReCallJobTrigger"/>
             </list>
         </property>
     </bean>
@@ -26,5 +27,16 @@
     <bean id="callBackJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="callBackJobDetail"/>
         <property name="cronExpression" value="0 0/5 * * * ? "/>
+    </bean>
+
+    <bean id="failReCallJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="failReCallJob"/>
+        <property name="targetMethod" value="reCall"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="failReCallJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="failReCallJobDetail"/>
+        <property name="cronExpression" value="0 30 1 * * ? "/>
     </bean>
 </beans>

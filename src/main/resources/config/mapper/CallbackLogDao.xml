@@ -29,7 +29,7 @@
 		UPDATE callback_log
 		SET
 		is_call=#{isCall},is_finish=#{isFinish},update_time=#{updateTime}
-		WHERE idfa=#{idfa} AND app_code=#{appCode}
+		WHERE idfa=#{idfa} AND app_code=#{appCode} AND is_balance=#{isBalance}
 	</update>
 
     <insert id="insertCallBack">

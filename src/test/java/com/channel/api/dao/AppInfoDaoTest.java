@@ -1,5 +1,7 @@
 package com.channel.api.dao;
 
+import com.channel.api.entity.FailCallback;
+import com.channel.api.util.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class AppInfoDaoTest {
     private AppInfoDao appInfoDao;
     @Autowired
     private AdvertInfoDao advertInfoDao;
+    @Autowired
+    private FailCallbackDao failCallbackDao;
 
     @Test
     public void findAll() throws Exception {
@@ -34,4 +38,15 @@ public class AppInfoDaoTest {
         System.out.println("======");
     }
 
+    @Test
+    public void countFailCall() throws Exception {
+        Date now =new Date();
+        String start= DateUtils.defineDayBefore2Str(now,-1,"yyyy-MM-dd 00:00:00");
+        String end= DateUtils.formatDate2Str(now,"yyyy-MM-dd 00:00:00");
+        FailCallback failCallback=new FailCallback();
+        failCallback.setIsBalance(1);
+        failCallback.setIsRecall(0);
+        System.out.println(failCallbackDao.countFailCall(failCallback,start,end));
+        System.out.println("======");
+    }
 }

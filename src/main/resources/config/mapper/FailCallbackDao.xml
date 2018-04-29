@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.channel.api.dao.FailCallbackDao">
+    <resultMap id="failCallback" type="FailCallback">
+        <id property="idfa" column="idfa"/>
+        <id property="adverterCode" column="adverter_code"/>
+        <id property="appCode" column="app_code"/>
+        <id property="callback" column="callback"/>
+        <id property="isRecall" column="is_recall"/>
+        <id property="isBalance" column="is_balance"/>
+        <id property="createTime" column="create_time"/>
+        <id property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+    <insert id="insertFailCallback">
+		INSERT INTO fail_callback(
+		idfa, adverter_code, app_code, callback, is_recall, is_balance,create_time
+		)VALUES (
+		#{idfa}, #{adverterCode}, #{appCode}, #{callback}, #{isRecall}, #{isBalance},#{createTime}
+		)
+	</insert>
+
+    <select id="countFailCall" resultType="java.lang.Integer">
+        SELECT COUNT(idfa) FROM fail_callback
+        WHERE create_time >= #{startTime}
+		AND
+		<![CDATA[ create_time < #{endTime}]]>
+		AND is_balance=#{log.isBalance} AND is_recall=#{log.isRecall}
+    </select>
+
+    <select id="findList" resultType="failCallback">
+        SELECT *
+        FROM fail_callback
+        WHERE create_time >= #{startTime}
+        AND
+        <![CDATA[ create_time < #{endTime}]]>
+        AND is_balance=#{log.isBalance} AND is_recall=#{log.isRecall}
+        limit #{limit}
+    </select>
+
+    <update id="updateStatus">
+        UPDATE fail_callback
+        SET
+        is_recall=#{isRecall},update_time=#{updateTime}
+        WHERE idfa=#{idfa} AND app_code=#{appCode} AND is_balance=#{isBalance}
+    </update>
+
+
+</mapper>

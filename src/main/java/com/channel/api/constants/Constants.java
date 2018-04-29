@@ -11,5 +11,20 @@ public class Constants {
     public static final String CALL_BACK_SUC="suc";
     public static final String CALL_BACK_FAIL="fail";
 
+    public static final int CALL_BACK_ISBLANCE_YES=1;
+    public static final int CALL_BACK_ISBLANCE_NO=0;
+
+    public static final int CALL_BACK_ISCALL_YES=1;
+    public static final int CALL_BACK_ISCALL_NO=0;
+
+    public static final int CALL_BACK_ISFINISH_YES=1;
+    public static final int CALL_BACK_ISFINISH_NO=0;
+
+
+    public static final int FAIL_CALL_ISRECALL_YES=1;
+    public static final int FAIL_CALL_ISRECALL_NO=0;
+
+    public static final int FAIL_CALL_ISBLANCE_YES=1;
+    public static final int FAIL_CALL_ISBLANCE_NO=0;
 
 }
