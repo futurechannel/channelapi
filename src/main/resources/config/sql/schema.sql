@@ -32,7 +32,7 @@ PRIMARY KEY (`app_code`)
 
 -- 上报记录表
 CREATE TABLE report_log(
-`idfa` VARCHAR(50) NOT NULL  COMMENT 'idfa',
+`idfa` VARCHAR(200) NOT NULL  COMMENT 'idfa',
 `adverter_code` VARCHAR(100)  COMMENT '广告商标识',
 `app_code` VARCHAR(50) NOT NULL COMMENT '应用标识',
 `click_id` VARCHAR(50)  COMMENT '广告点击id',

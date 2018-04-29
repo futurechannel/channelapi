@@ -72,7 +72,7 @@ public class CallBackController extends BaseController {
 
         int i=callBackService.insertCallBack(callbackLog);
 
-        if(i<1){
+        if(i < 0){
             throw new ApiException(ErrorCode.E500.getCode()+"");
         }
 

@@ -74,7 +74,7 @@ public class ReportLogController extends BaseController{
             uaParam = URL_PARAM_SEPARATOR + "ua=" + ua;
         }
         try {
-            callback = URLEncoder.encode("http://60.205.231.1:8080/channelapi/callback/app?"
+            callback = URLEncoder.encode("http://api.stonggo.com/channelapi/callback/app?"
                     + "idfa=" + idfa + URL_PARAM_SEPARATOR + "appcode="+ appCode + posParam, "utf-8");
         } catch (UnsupportedEncodingException e) {
             logger.error("encode 转码错误",e);
