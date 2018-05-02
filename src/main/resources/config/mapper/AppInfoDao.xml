@@ -5,8 +5,7 @@
         <id property="appCode" column="app_code"/>
         <id property="appName" column="app_name"/>
         <id property="appId" column="app_id"/>
-        <!--<id property="reportUrl" column="report_url"/>-->
-        <!--<id property="comeFrom" column="come_from"/>-->
+        <id property="reportUrl" column="report_url"/>
         <id property="status" column="status"/>
         <id property="otherParams" column="other_params"/>
         <id property="callbackUrl" column="callback_url"/>

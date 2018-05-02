@@ -83,11 +83,13 @@ public class ReportLogController extends BaseController{
 
         long start=new Date().getTime();
 
+        String reportUrl=appInfo.getReportUrl();
+
         //转发请求给应用
-        if ( !StringUtils.isEmpty(idfa) && !StringUtils.isEmpty(from) && !StringUtils.isEmpty(callback) && !StringUtils.isEmpty(appCode)){
+        if ( !StringUtils.isEmpty(idfa) && !StringUtils.isEmpty(from) && !StringUtils.isEmpty(callback) && !StringUtils.isEmpty(appCode)&&!StringUtils.isEmpty(reportUrl)){
 //            String url = appInfo.getReportUrl()
 //                    + "idfa=" + idfa + URL_PARAM_SEPARATOR + "from=" + from + URL_PARAM_SEPARATOR + "callback=" + callback + URL_PARAM_SEPARATOR +  "pos=0";
-            String url= StringFormatUtils.format(advertInfo.getReportUrl(),idfa,from,callback);
+            String url= StringFormatUtils.format(reportUrl,idfa,from,callback);
 
             String resStr=HttpClientUtil.httpGet(url);
             if(StringUtils.isEmpty(resStr)){
@@ -101,7 +103,7 @@ public class ReportLogController extends BaseController{
 //            }
             logger.info("Forwarding request:[" + " resStr:" + resStr +"url:"+url+"]");
         }else {
-            logger.error("Forwarding request param error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + "]");
+            logger.error("Forwarding request param error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + " reportUrl:" + reportUrl +"]");
             throw new ApiException(ErrorCode.E902.getCode()+"");
         }
 

@@ -7,8 +7,7 @@ public class AppInfo {
     private String appCode;
     private String appId;
     private String appName;
-//    private String comeFrom;
-//    private String reportUrl;
+    private String reportUrl;
     private Integer status;
     private String otherParams;
     private String callbackUrl;
@@ -37,21 +36,14 @@ public class AppInfo {
         this.appName = appName;
     }
 
-//    public String getComeFrom() {
-//        return comeFrom;
-//    }
-//
-//    public void setComeFrom(String comeFrom) {
-//        this.comeFrom = comeFrom;
-//    }
 
-//    public String getReportUrl() {
-//        return reportUrl;
-//    }
-//
-//    public void setReportUrl(String reportUrl) {
-//        this.reportUrl = reportUrl;
-//    }
+    public String getReportUrl() {
+        return reportUrl;
+    }
+
+    public void setReportUrl(String reportUrl) {
+        this.reportUrl = reportUrl;
+    }
 
     public Integer getStatus() {
         return status;
@@ -83,8 +75,7 @@ public class AppInfo {
                 "appCode='" + appCode + '\'' +
                 ", appId='" + appId + '\'' +
                 ", appName='" + appName + '\'' +
-//                ", comeFrom='" + comeFrom + '\'' +
-//                ", reportUrl='" + reportUrl + '\'' +
+                ", reportUrl='" + reportUrl + '\'' +
                 ", status=" + status +
                 ", otherParams='" + otherParams + '\'' +
                 ", callbackUrl='" + callbackUrl + '\'' +

@@ -10,7 +10,6 @@ public class AdvertInfo {
     private String adverterName;
     private int balanceRatio;
     private String comeFrom;
-    private String reportUrl;
 
     public String getAdverterCode() {
         return adverterCode;
@@ -52,13 +51,6 @@ public class AdvertInfo {
         this.comeFrom = comeFrom;
     }
 
-    public String getReportUrl() {
-        return reportUrl;
-    }
-
-    public void setReportUrl(String reportUrl) {
-        this.reportUrl = reportUrl;
-    }
 
     @Override
     public String toString() {
@@ -68,7 +60,6 @@ public class AdvertInfo {
                 ", adverterName='" + adverterName + '\'' +
                 ", balanceRatio=" + balanceRatio +
                 ", comeFrom='" + comeFrom + '\'' +
-                ", reportUrl='" + reportUrl + '\'' +
                 '}';
     }
 }

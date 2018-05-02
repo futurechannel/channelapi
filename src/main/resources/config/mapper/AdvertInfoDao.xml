@@ -6,7 +6,6 @@
         <id property="appCode" column="app_code"/>
         <id property="adverterName" column="adverter_name"/>
         <id property="balanceRatio" column="balance_ratio"/>
-        <id property="reportUrl" column="report_url"/>
         <id property="comeFrom" column="come_from"/>
     </resultMap>
 
