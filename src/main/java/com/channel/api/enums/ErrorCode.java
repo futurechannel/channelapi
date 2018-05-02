@@ -9,10 +9,12 @@ public enum ErrorCode {
 
     E601(601, "appId不存在"),
     E602(602, "ref不存在"),
+    E603(603, "渠道信息不存在"),
 
     E801(801, "appcode不存在"),
 
-    E901(901,"上报接口异常");
+    E901(901,"上报接口异常"),
+    E902(902,"上报参数错误");
 
     private int code;
     private String msg;

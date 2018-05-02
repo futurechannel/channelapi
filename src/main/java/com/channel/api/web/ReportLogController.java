@@ -3,15 +3,17 @@ package com.channel.api.web;
 import com.channel.api.base.BaseController;
 import com.channel.api.constants.ConstantMaps;
 import com.channel.api.dto.BaseResult;
-import com.channel.api.dto.MangguoDto;
+import com.channel.api.entity.AdvertInfo;
 import com.channel.api.entity.AppInfo;
 import com.channel.api.entity.ReportLog;
 import com.channel.api.enums.ErrorCode;
 import com.channel.api.exception.ApiException;
 import com.channel.api.form.ReportLogForm;
 import com.channel.api.service.ReportLogService;
+import com.channel.api.util.ConfigUtils;
 import com.channel.api.util.GsonUtils;
 import com.channel.api.util.HttpClientUtil;
+import com.channel.api.util.StringFormatUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
@@ -47,73 +48,70 @@ public class ReportLogController extends BaseController{
         logger.info("req:["+GsonUtils.pojoToJson(form)+"]");
 
         String idfa = form.getIdfa();
-        String pos = form.getClickid();
-        String ip = form.getIp();
-        String ua = form.getUserAgent();
 
         AppInfo appInfo= ConstantMaps.getAppCode(form.getAppid());
+
+        String advertCode=form.getRef();
 
         if(appInfo==null){
             throw new ApiException(ErrorCode.E601.getCode()+"");
         }
+
+        if(!ConstantMaps.advertSets.contains(advertCode)){
+            throw new ApiException(ErrorCode.E602.getCode()+"");
+        }
+
         String appCode=appInfo.getAppCode();
-        String from = appInfo.getComeFrom();
 
-        String callback = null;
+        AdvertInfo advertInfo=ConstantMaps.getAdvertInfo(appCode,advertCode);
 
-        String posParam = "";
-        String ipParam = "";
-        String uaParam = "";
-        if (!StringUtils.isEmpty(pos)){
-            posParam = URL_PARAM_SEPARATOR + "pos=" + pos;
+        if(advertInfo==null){
+            throw new ApiException(ErrorCode.E603.getCode()+"");
         }
-        if (!StringUtils.isEmpty(ip)){
-            ipParam = URL_PARAM_SEPARATOR + "ip=" + ip;
-        }
-        if (!StringUtils.isEmpty(ua)){
-            uaParam = URL_PARAM_SEPARATOR + "ua=" + ua;
-        }
+
+        String from = advertInfo.getComeFrom();
+
+        String callback ;
+
         try {
-            callback = URLEncoder.encode("http://api.stonggo.com/channelapi/callback/app?"
-                    + "idfa=" + idfa + URL_PARAM_SEPARATOR + "appcode="+ appCode + posParam, "utf-8");
+            callback = URLEncoder.encode(ConfigUtils.getValue("our.callback.url")
+                    + "idfa=" + idfa + URL_PARAM_SEPARATOR + "appcode="+ appCode , "utf-8");
         } catch (UnsupportedEncodingException e) {
             logger.error("encode 转码错误",e);
+            throw new ApiException(ErrorCode.E901.getCode()+"");
         }
 
         long start=new Date().getTime();
 
         //转发请求给应用
         if ( !StringUtils.isEmpty(idfa) && !StringUtils.isEmpty(from) && !StringUtils.isEmpty(callback) && !StringUtils.isEmpty(appCode)){
-            String url = appInfo.getReportUrl()
-                    + "idfa=" + idfa + URL_PARAM_SEPARATOR + "from=" + from + URL_PARAM_SEPARATOR + "callback=" + callback + URL_PARAM_SEPARATOR +  "pos=0"
-                    + ipParam
-                    + uaParam;
+//            String url = appInfo.getReportUrl()
+//                    + "idfa=" + idfa + URL_PARAM_SEPARATOR + "from=" + from + URL_PARAM_SEPARATOR + "callback=" + callback + URL_PARAM_SEPARATOR +  "pos=0";
+            String url= StringFormatUtils.format(advertInfo.getReportUrl(),idfa,from,callback);
 
             String resStr=HttpClientUtil.httpGet(url);
             if(StringUtils.isEmpty(resStr)){
-                logger.error("report error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + "]");
+                logger.error("report error:[" + "url:" + url + "]");
                 throw new ApiException(ErrorCode.E901.getCode()+"");
             }
-            MangguoDto mangguoDto=GsonUtils.jsonToPojo(resStr,MangguoDto.class);
-            if(!mangguoDto.getRet().equals("0")){
-                logger.error("report error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + "]");
-                throw new ApiException(ErrorCode.E901.getCode()+"");
-            }
+//            MangguoDto mangguoDto=GsonUtils.jsonToPojo(resStr,MangguoDto.class);
+//            if(!mangguoDto.getRet().equals("0")){
+//                logger.error("report error:[" + "url:" + url + "]");
+//                throw new ApiException(ErrorCode.E901.getCode()+"");
+//            }
             logger.info("Forwarding request:[" + " resStr:" + resStr +"url:"+url+"]");
         }else {
             logger.error("Forwarding request param error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + "]");
+            throw new ApiException(ErrorCode.E902.getCode()+"");
         }
 
-//        logger.info("report耗时:"+(new Date().getTime()-start)+"ms");
 
         //上报记录入库
         ReportLog log=new ReportLog();
         log.setIdfa(idfa);
         log.setAppCode(appCode);
-        if(!ConstantMaps.advertSets.contains(form.getRef())){
-            throw new ApiException(ErrorCode.E602.getCode()+"");
-        }
-        log.setAdverterCode(form.getRef());
+
+        log.setAdverterCode(advertCode);
         log.setCallback(form.getCallback());
         log.setReportTime(new Date());
 

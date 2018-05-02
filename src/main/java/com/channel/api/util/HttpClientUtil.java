@@ -49,7 +49,7 @@ public class HttpClientUtil {
                 HttpEntity entity = response.getEntity();
                 strResult = EntityUtils.toString(entity, "utf-8");
             } else {
-                logger.error("上报应用异常:" + url);
+                logger.error("上报应用异常,code:"+response.getStatusLine().getStatusCode() +"url:" + url);
             }
         }
         catch (IOException e) {

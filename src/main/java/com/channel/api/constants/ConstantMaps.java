@@ -1,6 +1,7 @@
 package com.channel.api.constants;
 
 
+import com.channel.api.entity.AdvertInfo;
 import com.channel.api.entity.AppInfo;
 import com.channel.api.util.ConfigUtils;
 import com.channel.api.util.DateUtils;
@@ -18,6 +19,8 @@ public class ConstantMaps {
     public static Set<String> advertSets = new HashSet<>();
 
     public static Map<String, Integer> balanceMap = new HashMap<>();
+
+    public static Map<String,AdvertInfo> advertInfoMap=new HashMap<>();
 
     public static List<String> reportTables=new ArrayList<>();
 
@@ -39,6 +42,10 @@ public class ConstantMaps {
 
     public static void setBalanceMap(Map<String, Integer> balanceMap) {
         ConstantMaps.balanceMap = balanceMap;
+    }
+
+    public static void setAdvertInfoMap(Map<String, AdvertInfo> advertInfoMap) {
+        ConstantMaps.advertInfoMap = advertInfoMap;
     }
 
     public static String getAppId(String code) {
@@ -65,6 +72,11 @@ public class ConstantMaps {
         Integer balance=balanceMap.get(key);
 
         return balance!=null?balance:Integer.parseInt(ConfigUtils.getValue("default.reduce.per"));
+    }
+
+    public static AdvertInfo getAdvertInfo(String appCode, String advertCode){
+        String key = getBalanceKey(appCode, advertCode);
+        return advertInfoMap.get(key);
     }
 
 

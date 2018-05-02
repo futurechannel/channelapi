@@ -46,6 +46,7 @@ public class ConfigJob {
 
         Set<String> tmpAdvertSets=new HashSet<>();
         Map<String,Integer> tmpBalanceMap=new HashMap<>();
+        Map<String,AdvertInfo> tmpAdvertInfoMap=new HashMap<>();
 
 
         List<String> tmpReportTables=new ArrayList<>();
@@ -66,6 +67,7 @@ public class ConfigJob {
         for(AdvertInfo advertInfo:advertInfos){
             tmpAdvertSets.add(advertInfo.getAdverterCode());
             tmpBalanceMap.put(ConstantMaps.getBalanceKey(advertInfo.getAppCode(),advertInfo.getAdverterCode()),advertInfo.getBalanceRatio());
+            tmpAdvertInfoMap.put(ConstantMaps.getBalanceKey(advertInfo.getAppCode(),advertInfo.getAdverterCode()),advertInfo);
         }
 
         if(!CollectionUtils.isEmpty(tmpAppCodeMap)&&!CollectionUtils.isEmpty(tmpAppIdMap)){
@@ -76,6 +78,7 @@ public class ConfigJob {
         if(!CollectionUtils.isEmpty(tmpAdvertSets)&&!CollectionUtils.isEmpty(tmpBalanceMap)){
             ConstantMaps.setAdvertSets(tmpAdvertSets);
             ConstantMaps.setBalanceMap(tmpBalanceMap);
+            ConstantMaps.setAdvertInfoMap(tmpAdvertInfoMap);
         }
 
     }
