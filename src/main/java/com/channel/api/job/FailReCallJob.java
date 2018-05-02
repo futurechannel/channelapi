@@ -100,6 +100,8 @@ public class FailReCallJob {
             }
         }
 
+        LOG.info("@Scheduled======failRecall() is end===end");
+
 
 
     }

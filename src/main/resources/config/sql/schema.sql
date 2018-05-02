@@ -91,5 +91,9 @@ CREATE INDEX index_fail_callback_recall ON fail_callback (is_recall);
 CREATE INDEX index_fail_callback_balance ON fail_callback (is_balance);
 CREATE INDEX index_fail_callback_create ON fail_callback (create_time);
 
+alter table advert_info add report_url VARCHAR(500) COMMENT '应用上报地址';
+ALTER TABLE advert_info ADD come_from VARCHAR(50) COMMENT '应用渠道标识';
+
+alter table app_info drop column come_from;
 
 
