@@ -11,6 +11,7 @@ public class AppInfo {
     private Integer status;
     private String otherParams;
     private String callbackUrl;
+    private int isRepeatable;
 
     public String getAppCode() {
         return appCode;
@@ -69,6 +70,15 @@ public class AppInfo {
         this.callbackUrl = callbackUrl;
     }
 
+
+    public int getIsRepeatable() {
+        return isRepeatable;
+    }
+
+    public void setIsRepeatable(int isRepeatable) {
+        this.isRepeatable = isRepeatable;
+    }
+
     @Override
     public String toString() {
         return "AppInfo{" +
@@ -79,6 +89,7 @@ public class AppInfo {
                 ", status=" + status +
                 ", otherParams='" + otherParams + '\'' +
                 ", callbackUrl='" + callbackUrl + '\'' +
+                ", isRepeatable=" + isRepeatable +
                 '}';
     }
 }

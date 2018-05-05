@@ -10,6 +10,7 @@ CREATE TABLE advert_info(
 `app_code` VARCHAR(50) NOT NULL COMMENT '应用标识',
 `adverter_name` VARCHAR(100) NOT NULL COMMENT '广告商名',
 `balance_ratio` INT NOT NULL COMMENT '结算比例',
+come_from VARCHAR(50) COMMENT '应用渠道标识',
 PRIMARY KEY (`adverter_code`,`app_code`)
 
 )ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='广告信息商表';
@@ -22,7 +23,6 @@ CREATE TABLE app_info(
 `app_id` VARCHAR(50) NOT NULL COMMENT '应用id',
 `report_url` VARCHAR(500) NOT NULL COMMENT '上报地址',
 `token` VARCHAR(50) COMMENT '校验token',
-`come_from` VARCHAR(50)  COMMENT '渠道标识',
 `callback_url` VARCHAR(500) COMMENT '回调地址',
 `other_params` VARCHAR(200) COMMENT '其他参数',
 `status` TINYINT NOT NULL DEFAULT 0 COMMENT '应用开关',
@@ -94,6 +94,5 @@ CREATE INDEX index_fail_callback_create ON fail_callback (create_time);
 alter table advert_info add report_url VARCHAR(500) COMMENT '应用上报地址';
 ALTER TABLE advert_info ADD come_from VARCHAR(50) COMMENT '应用渠道标识';
 
-alter table app_info drop column come_from;
-
+ALTER TABLE app_info ADD is_repeatable TINYINT DEFAULT 0 COMMENT '是否排重idfa,0表示不排重，1表示排重';
 

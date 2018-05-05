@@ -33,20 +33,22 @@ public class CallBackHandler {
         }
 
         if(result==null|| !HttpStatus.OK.equals(result.getStatusCode())){
-            logger.warn("回调失败,url:"+url);
+            logger.error("回调失败,url:"+url);
             return Constants.CALL_BACK_FAIL;
         }
 
-        CallBackDto rsp;
-        try {
-            rsp= GsonUtils.jsonToPojo(result.getBody(),CallBackDto.class);
-
-        }catch (Exception e){
-            logger.warn("json解析失败:"+result.getBody(),e);
-            return Constants.CALL_BACK_FAIL;
-        }
-
-        return rsp!=null&&rsp.getStatus()==1?Constants.CALL_BACK_SUC:Constants.CALL_BACK_FAIL;
+//        CallBackDto rsp;
+//        try {
+//            rsp= GsonUtils.jsonToPojo(result.getBody(),CallBackDto.class);
+//
+//        }catch (Exception e){
+//            logger.warn("json解析失败:"+result.getBody(),e);
+//            return Constants.CALL_BACK_FAIL;
+//        }
+//
+//        return rsp!=null&&rsp.getStatus()==1?Constants.CALL_BACK_SUC:Constants.CALL_BACK_FAIL;
+        logger.info("回调渠道:url:{"+url+"},body:{"+result.getBody()+"}");
+        return Constants.CALL_BACK_SUC;
     }
 
 }
