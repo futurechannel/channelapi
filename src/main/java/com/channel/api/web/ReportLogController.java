@@ -10,10 +10,7 @@ import com.channel.api.enums.ErrorCode;
 import com.channel.api.exception.ApiException;
 import com.channel.api.form.ReportLogForm;
 import com.channel.api.service.ReportLogService;
-import com.channel.api.util.ConfigUtils;
-import com.channel.api.util.GsonUtils;
-import com.channel.api.util.HttpClientUtil;
-import com.channel.api.util.StringFormatUtils;
+import com.channel.api.util.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +21,7 @@ import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
+import java.util.Map;
 
 
 /**
@@ -89,6 +87,30 @@ public class ReportLogController extends BaseController {
             logger.error("Forwarding request param error:[" + "idfa:" + idfa + " from:" + from + " callback:" + callback + " reportUrl:" + reportUrl + "]");
             throw new ApiException(ErrorCode.E902.getCode() + "");
         }
+
+        //拼接url
+        String url = StringFormatUtils.format(reportUrl, idfa, from, callback);
+
+        String otherParams=appInfo.getOtherParams();
+
+        if(!StringUtils.isEmpty(otherParams)){
+            Map<String,Object> logFormMap= BeanUtil.transBean2Map(form);
+            Map<String,String> otherParamMap=StringFormatUtils.string2Map(otherParams);
+            StringBuilder sb = new StringBuilder();
+            for(String key:otherParamMap.keySet()){
+                sb.append("&").append(key).append("=");
+                Object obj=logFormMap.get(otherParamMap.get(key));
+                if(!StringUtils.isEmpty(obj)){
+                    sb.append(obj);
+                } else {
+                    logger.error("req error:[ref:"+advertCode+",appCode:"+appCode+","+otherParamMap.get(key)+" is null]");
+                    throw new ApiException(ErrorCode.E902.getCode()+"");
+                }
+            }
+
+            url = url+sb.toString();
+        }
+
         //上报记录入库
         ReportLog log = new ReportLog();
         log.setIdfa(idfa);
@@ -105,7 +127,6 @@ public class ReportLogController extends BaseController {
         }
 
         //转发请求给应用
-        String url = StringFormatUtils.format(reportUrl, idfa, from, callback);
 
         String resStr = HttpClientUtil.httpGet(url);
         if (StringUtils.isEmpty(resStr)) {

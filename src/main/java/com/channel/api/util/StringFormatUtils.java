@@ -1,6 +1,10 @@
 package com.channel.api.util;
 
+import org.springframework.util.StringUtils;
+
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -12,6 +16,23 @@ public class StringFormatUtils {
 
         String result=MessageFormat.format(str,obj);
         return result;
+    }
+
+    public static Map<String,String> string2Map(String str){
+        Map<String,String> map=new HashMap<>();
+        if(StringUtils.isEmpty(str)){
+            return map;
+        }
+
+        String[] strArrs=str.split(",");
+        for(String strArr:strArrs) {
+            String[] items=strArr.split(":");
+            if(items.length >1){
+                map.put(items[0],items[1]);
+            }
+        }
+
+        return map;
     }
 
     public static void main(String[] args) {
