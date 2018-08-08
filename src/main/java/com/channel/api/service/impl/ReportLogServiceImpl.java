@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,15 +34,15 @@ public class ReportLogServiceImpl implements ReportLogService {
 
     @Override
     public int insert(ReportLog log) {
-        String tableName= ConstantMaps.getReportTableName();
+        String tableName = ConstantMaps.getReportTableName();
 
         int count;
         try {
-            count=reportLogDao.insert(log,tableName);
-        } catch(DuplicateKeyException e){
+            count = reportLogDao.insert(log, tableName);
+        } catch (DuplicateKeyException e) {
             return 0;
-        } catch (Exception e){
-            LOG.error("保存失败:"+log.toString(),e);
+        } catch (Exception e) {
+            LOG.error("保存失败:" + log.toString(), e);
             return -1;
         }
         return count;
@@ -49,6 +50,7 @@ public class ReportLogServiceImpl implements ReportLogService {
 
     /**
      * 查最近两天的上报记录
+     *
      * @param idfa
      * @param appcode
      * @return
@@ -56,12 +58,21 @@ public class ReportLogServiceImpl implements ReportLogService {
     @Override
     public ReportLog findById(String idfa, String appcode) {
 
-        List<String> tableNames=ConstantMaps.getReportTableNames();
+        List<String> tableNames = ConstantMaps.getReportTableNames(appcode);
+        ReportLog log = null;
 
-        ReportLog log=null;
-        for(String tableName:tableNames){
-            log=reportLogDao.findById(idfa,appcode,tableName);
-            if(log!=null){
+        if(CollectionUtils.isEmpty(tableNames)){
+            return log;
+        }
+
+        for (String tableName : tableNames) {
+            try {
+                log = reportLogDao.findById(idfa, appcode, tableName);
+            } catch (Exception e) {
+                LOG.error("查询异常table:" + tableName, e);
+                continue;
+            }
+            if (log != null) {
                 return log;
             }
         }

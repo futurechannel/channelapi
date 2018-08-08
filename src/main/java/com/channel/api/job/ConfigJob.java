@@ -31,7 +31,7 @@ public class ConfigJob {
     private AdvertInfoDao advertInfoDao;
 
     @PostConstruct
-    public void initConfig(){
+    public void initConfig() {
         refreshConfig();
     }
 
@@ -41,41 +41,55 @@ public class ConfigJob {
     @Scheduled(cron = "0 0/5 * * * ? ")
     public void refreshConfig() {
         LOG.info("@Scheduled-----refreshConfig()");
-        Map<String,AppInfo> tmpAppIdMap=new HashMap<>();
-        Map<String,String> tmpAppCodeMap=new HashMap<>();
+        Map<String, AppInfo> tmpAppIdMap = new HashMap<>();
+        Map<String, String> tmpAppCodeMap = new HashMap<>();
 
-        Set<String> tmpAdvertSets=new HashSet<>();
-        Map<String,Integer> tmpBalanceMap=new HashMap<>();
-        Map<String,AdvertInfo> tmpAdvertInfoMap=new HashMap<>();
-
-
-        List<String> tmpReportTables=new ArrayList<>();
-        Date date=new Date();
-        tmpReportTables.add(ConfigUtils.getValue("report.table.prefix")+ DateUtils.formatDate2Str(date,DateUtils.C_DATE_PATTON_YYYYMMDD));
-        tmpReportTables.add(ConfigUtils.getValue("report.table.prefix")+DateUtils.defineDayBefore2Str(date,-1,DateUtils.C_DATE_PATTON_YYYYMMDD));
-        ConstantMaps.setReportTables(tmpReportTables);
+        Set<String> tmpAdvertSets = new HashSet<>();
+        Map<String, Integer> tmpBalanceMap = new HashMap<>();
+        Map<String, AdvertInfo> tmpAdvertInfoMap = new HashMap<>();
 
 
-        List<AppInfo> appInfos=appInfoDao.findAll();
-        List<AdvertInfo> advertInfos=advertInfoDao.findAll();
+        Map<String, List<String>> tmpReportTables = new HashMap<>();
+        Date date = new Date();
+        List<String> tmpTables=new ArrayList<>();
+        String tmpTable = ConfigUtils.getValue("report.table.prefix") + DateUtils.formatDate2Str(date, DateUtils.C_DATE_PATTON_YYYYMMDD);
+        tmpTables.add(tmpTable);
 
-        for(AppInfo appInfo:appInfos){
-            tmpAppCodeMap.put(appInfo.getAppCode(),appInfo.getAppId());
-            tmpAppIdMap.put(appInfo.getAppId(),appInfo);
+        List<AppInfo> appInfos = appInfoDao.findAll();
+        List<AdvertInfo> advertInfos = advertInfoDao.findAll();
+
+        for (AppInfo appInfo : appInfos) {
+            tmpAppCodeMap.put(appInfo.getAppCode(), appInfo.getAppId());
+            tmpAppIdMap.put(appInfo.getAppId(), appInfo);
+            List<String> reports = new ArrayList<>();
+            //最多查七张表
+            int tableNums = appInfo.getQueryTableNum() <= 7 ? appInfo.getQueryTableNum() : 7;
+            for (int i = 0; i < tableNums; i++) {
+                if (i == 0) {
+                    reports.add(tmpTable);
+                } else {
+                    reports.add(ConfigUtils.getValue("report.table.prefix") + DateUtils.defineDayBefore2Str(date, -i, DateUtils.C_DATE_PATTON_YYYYMMDD));
+                }
+            }
+
+            tmpReportTables.put(appInfo.getAppCode(), reports);
         }
 
-        for(AdvertInfo advertInfo:advertInfos){
+        for (AdvertInfo advertInfo : advertInfos) {
             tmpAdvertSets.add(advertInfo.getAdverterCode());
-            tmpBalanceMap.put(ConstantMaps.getBalanceKey(advertInfo.getAppCode(),advertInfo.getAdverterCode()),advertInfo.getBalanceRatio());
-            tmpAdvertInfoMap.put(ConstantMaps.getBalanceKey(advertInfo.getAppCode(),advertInfo.getAdverterCode()),advertInfo);
+            tmpBalanceMap.put(ConstantMaps.getBalanceKey(advertInfo.getAppCode(), advertInfo.getAdverterCode()), advertInfo.getBalanceRatio());
+            tmpAdvertInfoMap.put(ConstantMaps.getBalanceKey(advertInfo.getAppCode(), advertInfo.getAdverterCode()), advertInfo);
         }
 
-        if(!CollectionUtils.isEmpty(tmpAppCodeMap)&&!CollectionUtils.isEmpty(tmpAppIdMap)){
+        if (!CollectionUtils.isEmpty(tmpAppCodeMap) && !CollectionUtils.isEmpty(tmpAppIdMap)) {
             ConstantMaps.setAppCodeMap(tmpAppCodeMap);
             ConstantMaps.setAppIdMap(tmpAppIdMap);
+            ConstantMaps.setReportTables(tmpReportTables);
         }
+        ConstantMaps.setReportTableName(tmpTables);
 
-        if(!CollectionUtils.isEmpty(tmpAdvertSets)&&!CollectionUtils.isEmpty(tmpBalanceMap)){
+
+        if (!CollectionUtils.isEmpty(tmpAdvertSets) && !CollectionUtils.isEmpty(tmpBalanceMap)) {
             ConstantMaps.setAdvertSets(tmpAdvertSets);
             ConstantMaps.setBalanceMap(tmpBalanceMap);
             ConstantMaps.setAdvertInfoMap(tmpAdvertInfoMap);

@@ -122,6 +122,8 @@ public class ReportLogController extends BaseController {
 
         int i = logService.insert(log);
 
+        long middle = new Date().getTime();
+
         if (i < appInfo.getIsRepeatable()) {
             throw new ApiException(ErrorCode.E701.getCode() + "");
         }
@@ -137,7 +139,7 @@ public class ReportLogController extends BaseController {
         logger.info("Forwarding request:[" + " resStr:" + resStr + "url:" + url + "]");
 
 
-        logger.info("总耗时:" + (new Date().getTime() - start) + "ms");
+        logger.info("appCode:"+appCode+",总耗时:" + (new Date().getTime() - start) + "ms,入库耗时:"+(middle - start)+"ms");
         return new BaseResult(ErrorCode.E200);
     }
 }

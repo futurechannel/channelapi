@@ -12,6 +12,7 @@ public class AppInfo {
     private String otherParams;
     private String callbackUrl;
     private int isRepeatable;
+    private int queryTableNum;
 
     public String getAppCode() {
         return appCode;
@@ -79,6 +80,14 @@ public class AppInfo {
         this.isRepeatable = isRepeatable;
     }
 
+    public int getQueryTableNum() {
+        return queryTableNum;
+    }
+
+    public void setQueryTableNum(int queryTableNum) {
+        this.queryTableNum = queryTableNum;
+    }
+
     @Override
     public String toString() {
         return "AppInfo{" +
@@ -90,6 +99,7 @@ public class AppInfo {
                 ", otherParams='" + otherParams + '\'' +
                 ", callbackUrl='" + callbackUrl + '\'' +
                 ", isRepeatable=" + isRepeatable +
+                ", queryTableNum=" + queryTableNum +
                 '}';
     }
 }

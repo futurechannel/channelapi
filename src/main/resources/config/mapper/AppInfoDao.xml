@@ -10,6 +10,7 @@
         <id property="otherParams" column="other_params"/>
         <id property="callbackUrl" column="callback_url"/>
         <id property="isRepeatable" column="is_repeatable"/>
+        <id property="queryTableNum" column="query_table_num"/>
     </resultMap>
 
     <select id="findAll" resultType="appInfo">

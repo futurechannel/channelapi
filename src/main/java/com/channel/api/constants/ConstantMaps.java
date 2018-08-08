@@ -4,7 +4,6 @@ package com.channel.api.constants;
 import com.channel.api.entity.AdvertInfo;
 import com.channel.api.entity.AppInfo;
 import com.channel.api.util.ConfigUtils;
-import com.channel.api.util.DateUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -22,9 +21,11 @@ public class ConstantMaps {
 
     public static Map<String,AdvertInfo> advertInfoMap=new HashMap<>();
 
-    public static List<String> reportTables=new ArrayList<>();
+    public static Map<String,List<String>> reportTables=new HashMap<>();
 
-    public static void setReportTables(List<String> reportTables) {
+    private static List<String> reportTableName=new ArrayList<>();
+
+    public static void setReportTables(Map<String,List<String>> reportTables) {
         ConstantMaps.reportTables = reportTables;
     }
 
@@ -85,10 +86,14 @@ public class ConstantMaps {
     }
 
     public static String getReportTableName(){
-        return reportTables.get(0);
+        return reportTableName.get(0);
     }
 
-    public static List<String> getReportTableNames(){
-        return reportTables;
+    public static void setReportTableName(List<String> reportTableNames) {
+        ConstantMaps.reportTableName = reportTableNames;
+    }
+
+    public static List<String> getReportTableNames(String appCode){
+        return reportTables.get(appCode);
     }
 }
