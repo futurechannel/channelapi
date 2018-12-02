@@ -13,6 +13,7 @@ public class AppInfo {
     private String callbackUrl;
     private int isRepeatable;
     private int queryTableNum;
+    private String token;
 
     public String getAppCode() {
         return appCode;
@@ -88,6 +89,14 @@ public class AppInfo {
         this.queryTableNum = queryTableNum;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Override
     public String toString() {
         return "AppInfo{" +
@@ -100,6 +109,7 @@ public class AppInfo {
                 ", callbackUrl='" + callbackUrl + '\'' +
                 ", isRepeatable=" + isRepeatable +
                 ", queryTableNum=" + queryTableNum +
+                ", token='" + token + '\'' +
                 '}';
     }
 }

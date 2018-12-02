@@ -2,6 +2,7 @@ package com.channel.api.web;
 
 import com.channel.api.base.BaseController;
 import com.channel.api.constants.ConstantMaps;
+import com.channel.api.constants.Constants;
 import com.channel.api.dto.BaseResult;
 import com.channel.api.entity.AdvertInfo;
 import com.channel.api.entity.AppInfo;
@@ -109,6 +110,11 @@ public class ReportLogController extends BaseController {
             }
 
             url = url+sb.toString();
+        }
+
+        String token=appInfo.getToken();
+        if (!StringUtils.isEmpty(token)) {
+            url=url+"&"+token+"="+Md5.Md5(from+idfa+ Constants.JZFENHUO_GAMEID+Constants.JZFENHUO_SIGNKEY).toUpperCase();
         }
 
         //上报记录入库

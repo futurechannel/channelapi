@@ -27,4 +27,7 @@ public class Constants {
     public static final int FAIL_CALL_ISBLANCE_YES=1;
     public static final int FAIL_CALL_ISBLANCE_NO=0;
 
+    public static final String JZFENHUO_GAMEID="1000128";
+    public static final String JZFENHUO_SIGNKEY="7E96E27DA2005B3FD2C5333D92480D0A";
+
 }

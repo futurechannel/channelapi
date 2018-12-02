@@ -11,6 +11,7 @@
         <id property="callbackUrl" column="callback_url"/>
         <id property="isRepeatable" column="is_repeatable"/>
         <id property="queryTableNum" column="query_table_num"/>
+        <id property="token" column="token"/>
     </resultMap>
 
     <select id="findAll" resultType="appInfo">
