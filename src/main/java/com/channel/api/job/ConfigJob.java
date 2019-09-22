@@ -7,6 +7,7 @@ import com.channel.api.entity.AdvertInfo;
 import com.channel.api.entity.AppInfo;
 import com.channel.api.util.ConfigUtils;
 import com.channel.api.util.DateUtils;
+import com.channel.api.util.IpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,5 +96,19 @@ public class ConfigJob {
             ConstantMaps.setAdvertInfoMap(tmpAdvertInfoMap);
         }
 
+    }
+
+    @Scheduled(cron = "0 0 0/1 * * ? ")
+    public void loadIpCache(){
+        LOG.info("=================load ip cache begin===============");
+        IpUtils.setIpCache();
+        LOG.info("=================load ip cache end===============");
+    }
+
+    @Scheduled(cron = "0 0/1 * * * ? ")
+    public void ipCacheLog(){
+        List<String> ipCache = IpUtils.getIpCache();
+        int size = ipCache == null ? 0 : ipCache.size();
+        LOG.info("ip cache size : {}", size);
     }
 }

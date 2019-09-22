@@ -1,6 +1,9 @@
 package com.channel.api.util;
 
 import com.alibaba.fastjson.JSONArray;
+import com.channel.api.dao.IpLoadConfigDao;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.BoundType;
 import com.google.common.collect.Range;
 import com.google.common.collect.RangeSet;
@@ -10,18 +13,47 @@ import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+@Component
 public class IpUtils {
     private static final int IP_LENGTH = 3;
     private static final String IP_RANGE_SEP = "-";
     private static final Logger logger = LoggerFactory.getLogger(IpUtils.class);
+    private static final String IP_CACHE_KEY = "ipCache";
+    private static IpUtils ipUtils;
+
+    @Autowired
+    private IpLoadConfigDao ipLoadConfigDao;
+
+    @PostConstruct
+    public void init() {
+        ipUtils = this;
+    }
+
+    private static Cache<String, List<String>> ipCache = CacheBuilder.newBuilder()
+            /*设置缓存容器的初始容量大小为10*/
+            .initialCapacity(100000)
+            /*设置缓存容器的最大容量大小为100*/
+            .maximumSize(10000)
+            /*设置记录缓存命中率*/
+            .recordStats()
+            /*设置并发级别为8，智并发基本值可以同事些缓存的线程数*/
+            .concurrencyLevel(10)
+            /*设置过期时间为2秒*/
+            .expireAfterAccess(1, TimeUnit.DAYS).build();
 
     //ip字符串转long
     public static long ipToLong(String ipStr) {
@@ -77,7 +109,7 @@ public class IpUtils {
      * @param size
      * @return
      */
-    public static List<String> getValidIps(int size){
+    private static List<String> getValidIpsFromFile(int size){
         List<String> ipList = new ArrayList<>();
         File blackFile = new File(Resources.getResource("iplist/black.txt").getPath());
         File whiteFile = new File(Resources.getResource("iplist/white.txt").getPath());
@@ -105,13 +137,13 @@ public class IpUtils {
                 }
             }
             whiteRangeSet.removeAll(blackRangeSet);
-            System.out.println(whiteRangeSet);
             List<Range<Long>> rangeList = new ArrayList<>(whiteRangeSet.asRanges());
             List<Range<Long>> finalRangeList = rangeList.stream().filter(longRange -> !(longRange.upperEndpoint() - longRange.lowerEndpoint() <= 1 &&
                     longRange.lowerBoundType() == BoundType.OPEN &&
                     longRange.upperBoundType() == BoundType.OPEN)).collect(Collectors.toList());
             int finalRangeSize = finalRangeList.size();
-            for (int i = 0; i < size; i++) {
+            Set<String> ipSet = new HashSet<>(size);
+            while (true){
                 int index = RandomUtils.nextInt(0, finalRangeSize);
                 Range<Long> range = finalRangeList.get(index);
                 Long lower = range.lowerEndpoint();
@@ -123,16 +155,52 @@ public class IpUtils {
                     upper = upper - 1;
                 }
                 long ipLong = RandomUtils.nextLong(lower, upper + 1);
-                ipList.add(longToIp(ipLong));
+                ipSet.add(longToIp(ipLong));
+                if (ipSet.size() >= size) {
+                    break;
+                }
             }
+            ipList.addAll(ipSet);
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("getValidIps error, ", e);
         }
         return ipList;
     }
 
+
+    public static void setIpCache(){
+        Integer ipCacheSize = ipUtils.ipLoadConfigDao.query();
+        logger.info("ip config cache size : {}", ipCacheSize);
+        ipCache.put(IP_CACHE_KEY, getValidIpsFromFile(ipCacheSize));
+    }
+
+    public static List<String> getIpCache(){
+        return ipCache.getIfPresent(IP_CACHE_KEY);
+    }
+
+    public static List<String> getValidIps(int size){
+        List<String> ipList = new ArrayList<>(size);
+        if (size == 0) {
+            return ipList;
+        }
+        List<String> ipListCache = getIpCache();
+        if (ipListCache == null || ipListCache.size() == 0) {
+            setIpCache();
+            ipListCache = getIpCache();
+        }
+        for (int i = 0; i < size; i++){
+            int randomIndex = RandomUtils.nextInt(0, ipListCache.size());
+            String ipRandom = ipListCache.get(randomIndex);
+            ipList.add(ipRandom);
+        }
+        return ipList;
+    }
+
+    public static void delKey(){
+        ipCache.invalidate(IP_CACHE_KEY);
+    }
+
     public static void main(String[] args) {
-        System.out.println(getValidIps(60));
+        System.out.println(getValidIps(100000));
     }
 }
