@@ -44,15 +44,15 @@ public class IpUtils {
     }
 
     private static Cache<String, List<String>> ipCache = CacheBuilder.newBuilder()
-            /*设置缓存容器的初始容量大小为10*/
-            .initialCapacity(100000)
-            /*设置缓存容器的最大容量大小为100*/
-            .maximumSize(10000)
+            /*设置缓存容器的初始容量*/
+            .initialCapacity(10)
+            /*设置缓存容器的最大容量*/
+            .maximumSize(100)
             /*设置记录缓存命中率*/
             .recordStats()
-            /*设置并发级别为8，智并发基本值可以同事些缓存的线程数*/
+            /*设置并发，并发基本值可以同时写缓存的线程数*/
             .concurrencyLevel(10)
-            /*设置过期时间为2秒*/
+            /*设置过期时间*/
             .expireAfterAccess(1, TimeUnit.DAYS).build();
 
     //ip字符串转long
@@ -200,7 +200,4 @@ public class IpUtils {
         ipCache.invalidate(IP_CACHE_KEY);
     }
 
-    public static void main(String[] args) {
-        System.out.println(getValidIps(100000));
-    }
 }
