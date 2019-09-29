@@ -96,3 +96,15 @@ ALTER TABLE advert_info ADD come_from VARCHAR(50) COMMENT '应用渠道标识';
 
 ALTER TABLE app_info ADD is_repeatable TINYINT DEFAULT 0 COMMENT '是否排重idfa,0表示不排重，1表示排重';
 
+-- ip加载数量
+CREATE TABLE ip_load_config (
+    `load_size` INT NOT NULL DEFAULT '0' COMMENT '加载数量'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ip加载配置';
+
+
+alter table advert_info add cpc_num int COMMENT '运营值';
+ALTER TABLE advert_info ADD cpc_time bigint COMMENT '虚拟投放时间，单位s';
+ALTER TABLE advert_info ADD cpc_circut tinyint COMMENT '虚拟投放是否开启,0:否，1:是';
+
+
+ALTER TABLE report_log ADD is_cpc_report tinyint COMMENT '是否是虚拟投放,0和空:否，1:是';

@@ -7,6 +7,9 @@
         <id property="adverterName" column="adverter_name"/>
         <id property="balanceRatio" column="balance_ratio"/>
         <id property="comeFrom" column="come_from"/>
+        <id property="cpcNum" column="cpc_num"/>
+        <id property="cpcTime" column="cpc_time"/>
+        <id property="cpcCircut" column="cpc_circut"/>
     </resultMap>
 
     <select id="findAll" resultType="advertInfo">
@@ -14,5 +17,7 @@
 		FROM advert_info
 		limit 0,3000
 	</select>
+
+
 
 </mapper>

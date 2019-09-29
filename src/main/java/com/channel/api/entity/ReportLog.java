@@ -12,6 +12,7 @@ public class ReportLog {
     private String appCode;
     private String clickId;
     private String callback;
+    private Integer isCpcReport;
     private Date reportTime;
 
     public String getIdfa() {
@@ -62,6 +63,14 @@ public class ReportLog {
         this.callback = callback;
     }
 
+    public Integer getIsCpcReport() {
+        return isCpcReport;
+    }
+
+    public void setIsCpcReport(Integer isCpcReport) {
+        this.isCpcReport = isCpcReport;
+    }
+
     @Override
     public String toString() {
         return "ReportLog{" +
@@ -70,6 +79,7 @@ public class ReportLog {
                 ", appCode='" + appCode + '\'' +
                 ", clickId='" + clickId + '\'' +
                 ", callback='" + callback + '\'' +
+                ", isCpcReport=" + isCpcReport +
                 ", reportTime=" + reportTime +
                 '}';
     }

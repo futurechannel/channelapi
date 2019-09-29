@@ -7,6 +7,7 @@
 		<id property="appCode" column="app_code"/>
 		<id property="clickId" column="click_id"/>
 		<id property="callback" column="callback"/>
+		<id property="isCpcReport" column="is_cpc_report"/>
 		<id property="reportTime" column="report_time"/>
 	</resultMap>
 

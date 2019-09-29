@@ -144,6 +144,39 @@ public class ReportLogController extends BaseController {
 
         logger.info("Forwarding request:[" + " resStr:" + resStr + "url:" + url + "]");
 
+        if(advertInfo.getCpcCircut()!=null&&advertInfo.getCpcCircut()==1&&advertInfo.getCpcNum()!=null){
+            try {
+                String cpcUrl=ConfigUtils.getValue("cpc.report.url")+"appCode="+appCode
+                        +"&advertCode="+advertCode+"&cpcNum=" +
+                        advertInfo.getCpcNum()+"&reportUrl="+URLEncoder.encode(reportUrl,"utf-8")+
+                        "&from="+advertInfo.getComeFrom();
+
+                if(!StringUtils.isEmpty(otherParams)){
+                    cpcUrl=cpcUrl+"&otherParams="+URLEncoder.encode(otherParams,"utf-8");
+                }
+
+                if(!StringUtils.isEmpty(token)){
+                    cpcUrl=cpcUrl+"&token="+token;
+                }
+
+                String cpcResStr = HttpClientUtil.httpGet(cpcUrl);
+                if (!StringUtils.isEmpty(cpcResStr)) {
+                    BaseResult baseResult=GsonUtils.jsonToPojo(cpcResStr,BaseResult.class);
+                    if(baseResult.getCode()==200){
+                        logger.info("cpc report success,cpcUrl:{},res:{}",cpcUrl,cpcResStr);
+                    } else {
+                        logger.error("cpc report error,cpcUrl:{},res:{}",cpcUrl,cpcResStr);
+                    }
+                } else {
+                    logger.error("report error:[" + "cpcUrl:" + cpcUrl + "]");
+                }
+
+            } catch (Exception e){
+               logger.error("send cpc fail",e);
+            }
+
+        }
+
 
         logger.info("appCode:"+appCode+",总耗时:" + (new Date().getTime() - start) + "ms,入库耗时:"+(middle - start)+"ms");
         return new BaseResult(ErrorCode.E200);

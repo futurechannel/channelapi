@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -24,6 +25,11 @@ public class CallBackHandler {
     private RestTemplate template;
 
     public String callBack(String url) {
+        if(StringUtils.isEmpty(url)){
+            logger.error("回调地址为空");
+            return Constants.CALL_BACK_FAIL;
+        }
+
         ResponseEntity<String> result;
         try {
             result=template.getForEntity(url,String.class);

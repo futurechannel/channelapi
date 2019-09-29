@@ -15,6 +15,7 @@ import com.channel.api.util.GsonUtils;
 import com.channel.api.util.NumUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -61,12 +62,17 @@ public class CallBackController extends BaseController {
             callbackLog.setIsBalance(0);
             logger.warn("未查到idfa记录["+idfa+"]");
         }else {
-            callbackLog.setCallback(log.getCallback());
-            callbackLog.setAdverterCode(log.getAdverterCode());
-            callbackLog.setIsCall(0);
+            if(!StringUtils.isEmpty(log.getCallback())) {
+                callbackLog.setCallback(log.getCallback());
+                callbackLog.setAdverterCode(log.getAdverterCode());
+                callbackLog.setIsCall(0);
 
-            //扣量逻辑,产生一个1-100的随机数,<=per表示需要回调
-            callbackLog.setIsBalance(NumUtils.randBoolean(1,100, ConstantMaps.getBalanceRatio(appCode,log.getAdverterCode())));
+                //扣量逻辑,产生一个1-100的随机数,<=per表示需要回调
+                callbackLog.setIsBalance(NumUtils.randBoolean(1,100, ConstantMaps.getBalanceRatio(appCode,log.getAdverterCode())));
+            } else {
+                callbackLog.setIsBalance(0);
+                callbackLog.setAdverterCode(log.getAdverterCode());
+            }
 
         }
 

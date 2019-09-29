@@ -10,6 +10,9 @@ public class AdvertInfo {
     private String adverterName;
     private int balanceRatio;
     private String comeFrom;
+    private Integer cpcNum;
+    private Long cpcTime;
+    private Integer cpcCircut;
 
     public String getAdverterCode() {
         return adverterCode;
@@ -51,6 +54,29 @@ public class AdvertInfo {
         this.comeFrom = comeFrom;
     }
 
+    public Integer getCpcNum() {
+        return cpcNum;
+    }
+
+    public void setCpcNum(Integer cpcNum) {
+        this.cpcNum = cpcNum;
+    }
+
+    public Long getCpcTime() {
+        return cpcTime;
+    }
+
+    public void setCpcTime(Long cpcTime) {
+        this.cpcTime = cpcTime;
+    }
+
+    public Integer getCpcCircut() {
+        return cpcCircut;
+    }
+
+    public void setCpcCircut(Integer cpcCircut) {
+        this.cpcCircut = cpcCircut;
+    }
 
     @Override
     public String toString() {
@@ -60,6 +86,9 @@ public class AdvertInfo {
                 ", adverterName='" + adverterName + '\'' +
                 ", balanceRatio=" + balanceRatio +
                 ", comeFrom='" + comeFrom + '\'' +
+                ", cpcNum=" + cpcNum +
+                ", cpcTime=" + cpcTime +
+                ", cpcCircut=" + cpcCircut +
                 '}';
     }
 }

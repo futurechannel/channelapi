@@ -7,7 +7,7 @@ import com.channel.api.entity.AdvertInfo;
 import com.channel.api.entity.AppInfo;
 import com.channel.api.util.ConfigUtils;
 import com.channel.api.util.DateUtils;
-import com.channel.api.util.IpUtils;
+import com.channel.api.util.HttpClientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +34,8 @@ public class ConfigJob {
     @PostConstruct
     public void initConfig() {
         refreshConfig();
+        refreshCpc();
+
     }
 
     /**
@@ -52,7 +54,7 @@ public class ConfigJob {
 
         Map<String, List<String>> tmpReportTables = new HashMap<>();
         Date date = new Date();
-        List<String> tmpTables=new ArrayList<>();
+        List<String> tmpTables = new ArrayList<>();
         String tmpTable = ConfigUtils.getValue("report.table.prefix") + DateUtils.formatDate2Str(date, DateUtils.C_DATE_PATTON_YYYYMMDD);
         tmpTables.add(tmpTable);
 
@@ -98,17 +100,42 @@ public class ConfigJob {
 
     }
 
-    @Scheduled(cron = "0 0 0/1 * * ? ")
-    public void loadIpCache(){
-        LOG.info("=================load ip cache begin===============");
-        IpUtils.setIpCache();
-        LOG.info("=================load ip cache end===============");
+
+    /**
+     * 每隔5分钟更新一次配置
+     */
+    @Scheduled(cron = "0 0/5 * * * ? ")
+    public void refreshCpc() {
+        LOG.info("@Scheduled-----refreshCpc() start");
+
+        List<AdvertInfo> advertInfos = advertInfoDao.findAll();
+        for (AdvertInfo advertInfo : advertInfos) {
+
+            if (advertInfo.getCpcNum() == null || advertInfo.getCpcTime() == null || advertInfo.getCpcCircut() == null || advertInfo.getCpcCircut() != 1) {
+                String url = ConfigUtils.getValue("stop.cpc.url")+"appCode="+advertInfo.getAppCode()
+                        +"&advertCode="+advertInfo.getAdverterCode();
+                try {
+                    String resStr = HttpClientUtil.httpGet(url);
+                    LOG.info("call stop cpc res:{}", resStr);
+                } catch (Exception e) {
+                    LOG.error("call stop cpc fail", e);
+                }
+            } else {
+                String url = ConfigUtils.getValue("start.cpc.url")+"appCode="+advertInfo.getAppCode()
+                        +"&advertCode="+advertInfo.getAdverterCode()+"&cpcNum="+advertInfo.getCpcNum()+"&cpcTime="+advertInfo.getCpcTime();
+                try {
+                    String resStr = HttpClientUtil.httpGet(url);
+                    LOG.info("call start cpc res:{}", resStr);
+                } catch (Exception e) {
+                    LOG.error("call start cpc fail", e);
+                }
+            }
+        }
+
+
+        LOG.info("@Scheduled-----refreshCpc() end");
+
     }
 
-    @Scheduled(cron = "0 0/1 * * * ? ")
-    public void ipCacheLog(){
-        List<String> ipCache = IpUtils.getIpCache();
-        int size = ipCache == null ? 0 : ipCache.size();
-        LOG.info("ip cache size : {}", size);
-    }
+
 }
