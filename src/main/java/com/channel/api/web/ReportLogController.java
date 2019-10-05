@@ -34,6 +34,7 @@ import java.util.Map;
 public class ReportLogController extends BaseController {
 
     public static final String URL_PARAM_SEPARATOR = "&";
+    public static final String OUR_CALL_BACK_POSTFIX = "/channelapi/callback/app?";
 
 
     @Resource
@@ -69,12 +70,18 @@ public class ReportLogController extends BaseController {
         }
 
         String from = advertInfo.getComeFrom();
+        String ourCallBackUrl = advertInfo.getOurCallBackUrl();
 
         String callback;
 
         try {
-            callback = URLEncoder.encode(ConfigUtils.getValue("our.callback.url")
-                    + "idfa=" + idfa + URL_PARAM_SEPARATOR + "appcode=" + appCode, "utf-8");
+            if(StringUtils.isEmpty(ourCallBackUrl)){
+                callback = URLEncoder.encode(ConfigUtils.getValue("our.callback.url")
+                        + "idfa=" + idfa + URL_PARAM_SEPARATOR + "appcode=" + appCode, "utf-8");
+            } else {
+                callback = URLEncoder.encode(ourCallBackUrl+OUR_CALL_BACK_POSTFIX
+                        + "idfa=" + idfa + URL_PARAM_SEPARATOR + "appcode=" + appCode, "utf-8");
+            }
         } catch (UnsupportedEncodingException e) {
             logger.error("encode 转码错误", e);
             throw new ApiException(ErrorCode.E901.getCode() + "");
@@ -124,6 +131,7 @@ public class ReportLogController extends BaseController {
 
         log.setAdverterCode(advertCode);
         log.setCallback(form.getCallback());
+        log.setIsCpcReport(0);
         log.setReportTime(new Date());
 
         int i = logService.insert(log);
@@ -157,6 +165,10 @@ public class ReportLogController extends BaseController {
 
                 if(!StringUtils.isEmpty(token)){
                     cpcUrl=cpcUrl+"&token="+token;
+                }
+
+                if(!StringUtils.isEmpty(ourCallBackUrl)){
+                    cpcUrl=cpcUrl+"&ourCallBackUrl="+URLEncoder.encode(ourCallBackUrl+OUR_CALL_BACK_POSTFIX,"utf-8");
                 }
 
                 String cpcResStr = HttpClientUtil.httpGet(cpcUrl);

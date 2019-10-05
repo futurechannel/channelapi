@@ -13,6 +13,7 @@ public class AdvertInfo {
     private Integer cpcNum;
     private Long cpcTime;
     private Integer cpcCircut;
+    private String ourCallBackUrl;
 
     public String getAdverterCode() {
         return adverterCode;
@@ -78,6 +79,14 @@ public class AdvertInfo {
         this.cpcCircut = cpcCircut;
     }
 
+    public String getOurCallBackUrl() {
+        return ourCallBackUrl;
+    }
+
+    public void setOurCallBackUrl(String ourCallBackUrl) {
+        this.ourCallBackUrl = ourCallBackUrl;
+    }
+
     @Override
     public String toString() {
         return "AdvertInfo{" +
@@ -89,6 +98,7 @@ public class AdvertInfo {
                 ", cpcNum=" + cpcNum +
                 ", cpcTime=" + cpcTime +
                 ", cpcCircut=" + cpcCircut +
+                ", ourCallBackUrl='" + ourCallBackUrl + '\'' +
                 '}';
     }
 }

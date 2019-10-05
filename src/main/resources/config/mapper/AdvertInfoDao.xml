@@ -10,6 +10,7 @@
         <id property="cpcNum" column="cpc_num"/>
         <id property="cpcTime" column="cpc_time"/>
         <id property="cpcCircut" column="cpc_circut"/>
+        <id property="ourCallBackUrl" column="our_callback_url"/>
     </resultMap>
 
     <select id="findAll" resultType="advertInfo">
