@@ -16,7 +16,11 @@ public enum ErrorCode {
     E801(801, "appcode不存在"),
 
     E901(901,"上报接口异常"),
-    E902(902,"上报参数错误");
+    E902(902,"上报参数错误"),
+
+    E903(903,"重复启动cpc"),
+    E904(904,"未配置cpc运营参数"),
+    E905(905,"不存在cpc发送队列");
 
     private int code;
     private String msg;

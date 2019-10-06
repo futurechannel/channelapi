@@ -108,3 +108,10 @@ ALTER TABLE advert_info ADD cpc_circut tinyint COMMENT '虚拟投放是否开启
 
 
 ALTER TABLE report_log ADD is_cpc_report tinyint COMMENT '是否是虚拟投放,0和空:否，1:是';
+
+ALTER TABLE advert_info ADD our_callback_url varchar(500) comment '变换回调地址的域名';
+create index index_report_log_cpc on report_log_20191004 (is_cpc_report);
+
+
+ALTER TABLE advert_info ADD call_back_rate_upper_limit decimal(10, 4) default 0.0000 not null comment '回调率上限预警限制';
+ALTER TABLE advert_info ADD call_back_rate_lower_limit decimal(10, 4) default 0.0000 not null comment '回调率下限预警限制';

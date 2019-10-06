@@ -3,10 +3,13 @@ package com.channel.api.job;
 import com.channel.api.constants.ConstantMaps;
 import com.channel.api.dao.AdvertInfoDao;
 import com.channel.api.dao.AppInfoDao;
+import com.channel.api.dto.BaseResult;
 import com.channel.api.entity.AdvertInfo;
 import com.channel.api.entity.AppInfo;
+import com.channel.api.enums.ErrorCode;
 import com.channel.api.util.ConfigUtils;
 import com.channel.api.util.DateUtils;
+import com.channel.api.util.GsonUtils;
 import com.channel.api.util.HttpClientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,7 +119,10 @@ public class ConfigJob {
                         +"&advertCode="+advertInfo.getAdverterCode();
                 try {
                     String resStr = HttpClientUtil.httpGet(url);
-                    LOG.info("call stop cpc res:{}", resStr);
+                    BaseResult baseResult=GsonUtils.jsonToPojo(resStr, BaseResult.class);
+                    if( ErrorCode.E905.getCode() != baseResult.getCode() ) {
+                        LOG.info("call stop cpc res:{}", resStr);
+                    }
                 } catch (Exception e) {
                     LOG.error("call stop cpc fail", e);
                 }
@@ -125,7 +131,10 @@ public class ConfigJob {
                         +"&advertCode="+advertInfo.getAdverterCode()+"&cpcNum="+advertInfo.getCpcNum()+"&cpcTime="+advertInfo.getCpcTime();
                 try {
                     String resStr = HttpClientUtil.httpGet(url);
-                    LOG.info("call start cpc res:{}", resStr);
+                    BaseResult baseResult=GsonUtils.jsonToPojo(resStr, BaseResult.class);
+                    if(ErrorCode.E903.getCode()!=baseResult.getCode()) {
+                        LOG.info("call start cpc res:{}", resStr);
+                    }
                 } catch (Exception e) {
                     LOG.error("call start cpc fail", e);
                 }
