@@ -12,7 +12,7 @@ import java.util.*;
  * Created by gq on 2018/4/15.
  */
 public class ConstantMaps {
-    public static Map<String, String> appCodeMap = new HashMap<>();
+    public static Map<String, AppInfo> appCodeMap = new HashMap<>();
     public static Map<String, AppInfo> appIdMap = new HashMap<>();
 
     public static Set<String> advertSets = new HashSet<>();
@@ -29,7 +29,7 @@ public class ConstantMaps {
         ConstantMaps.reportTables = reportTables;
     }
 
-    public static void setAppCodeMap(Map<String, String> appCodeMap) {
+    public static void setAppCodeMap(Map<String, AppInfo> appCodeMap) {
         ConstantMaps.appCodeMap = appCodeMap;
     }
 
@@ -49,7 +49,7 @@ public class ConstantMaps {
         ConstantMaps.advertInfoMap = advertInfoMap;
     }
 
-    public static String getAppId(String code) {
+    public static AppInfo getAppInfoByCode(String code) {
         if (appCodeMap.containsKey(code)) {
             return appCodeMap.get(code);
         }

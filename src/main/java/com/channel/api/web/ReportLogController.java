@@ -49,7 +49,14 @@ public class ReportLogController extends BaseController {
 
         String idfa = form.getIdfa();
 
-        AppInfo appInfo = ConstantMaps.getAppCode(form.getAppid());
+        AppInfo appInfo;
+
+        if (!StringUtils.isEmpty(form.getAppCode())) {
+            appInfo = ConstantMaps.getAppInfoByCode(form.getAppCode());
+        } else {
+            appInfo = ConstantMaps.getAppCode(form.getAppid());
+        }
+
 
         String advertCode = form.getRef();
 

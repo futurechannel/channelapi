@@ -48,7 +48,7 @@ public class ConfigJob {
     public void refreshConfig() {
         LOG.info("@Scheduled-----refreshConfig()");
         Map<String, AppInfo> tmpAppIdMap = new HashMap<>();
-        Map<String, String> tmpAppCodeMap = new HashMap<>();
+        Map<String, AppInfo> tmpAppCodeMap = new HashMap<>();
 
         Set<String> tmpAdvertSets = new HashSet<>();
         Map<String, Integer> tmpBalanceMap = new HashMap<>();
@@ -65,7 +65,7 @@ public class ConfigJob {
         List<AdvertInfo> advertInfos = advertInfoDao.findAll();
 
         for (AppInfo appInfo : appInfos) {
-            tmpAppCodeMap.put(appInfo.getAppCode(), appInfo.getAppId());
+            tmpAppCodeMap.put(appInfo.getAppCode(), appInfo);
             tmpAppIdMap.put(appInfo.getAppId(), appInfo);
             List<String> reports = new ArrayList<>();
             //最多查七张表
