@@ -51,8 +51,8 @@ public class ReportLogController extends BaseController {
 
         AppInfo appInfo;
 
-        if (!StringUtils.isEmpty(form.getAppCode())) {
-            appInfo = ConstantMaps.getAppInfoByCode(form.getAppCode());
+        if (!StringUtils.isEmpty(form.getAppcode())) {
+            appInfo = ConstantMaps.getAppInfoByCode(form.getAppcode());
         } else {
             appInfo = ConstantMaps.getAppCode(form.getAppid());
         }

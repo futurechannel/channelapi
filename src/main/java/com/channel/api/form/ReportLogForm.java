@@ -18,7 +18,7 @@ public class ReportLogForm {
     private String ip;
     private String clickid;
     private String userAgent;
-    private String appCode;
+    private String appcode;
 
     public String getIdfa() {
         return idfa;
@@ -76,11 +76,11 @@ public class ReportLogForm {
         this.userAgent = userAgent;
     }
 
-    public String getAppCode() {
-        return appCode;
+    public String getAppcode() {
+        return appcode;
     }
 
-    public void setAppCode(String appCode) {
-        this.appCode = appCode;
+    public void setAppcode(String appcode) {
+        this.appcode = appcode;
     }
 }
