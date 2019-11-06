@@ -1,5 +1,6 @@
 package com.channel.api.util;
 
+import com.channel.api.constants.Constants;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
@@ -10,6 +11,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 
@@ -48,14 +50,20 @@ public class HttpClientUtil {
                 // 读取服务器返回过来的json字符串数据
                 HttpEntity entity = response.getEntity();
                 strResult = EntityUtils.toString(entity, "utf-8");
+                if(StringUtils.isEmpty(strResult)){
+                    strResult="";
+                }
             } else {
                 logger.error("上报应用异常,code:"+response.getStatusLine().getStatusCode() +"url:" + url);
+                strResult = Constants.HTTP_RSP_FAIL;
             }
         }
         catch (IOException e) {
             logger.error("上报应用IO异常:" + url, e);
+            strResult = Constants.HTTP_RSP_FAIL;
         }catch (Exception e){
             logger.error("上报应用异常:" + url, e);
+            strResult = Constants.HTTP_RSP_FAIL;
         } finally {
             request.releaseConnection();
         }

@@ -30,4 +30,6 @@ public class Constants {
     public static final String JZFENHUO_GAMEID="1000128";
     public static final String JZFENHUO_SIGNKEY="7E96E27DA2005B3FD2C5333D92480D0A";
 
+    public static final String HTTP_RSP_FAIL= "http_error";
+
 }

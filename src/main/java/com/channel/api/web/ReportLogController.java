@@ -152,12 +152,12 @@ public class ReportLogController extends BaseController {
         //转发请求给应用
 
         String resStr = HttpClientUtil.httpGet(url);
-        if (StringUtils.isEmpty(resStr)) {
+        if (Constants.HTTP_RSP_FAIL.equals(resStr)) {
             logger.error("report error:[" + "url:" + url + "]");
             throw new ApiException(ErrorCode.E901.getCode() + "");
         }
 
-        logger.info("Forwarding request:[" + " resStr:" + resStr + "url:" + url + "]");
+        logger.info("Forwarding request:[" + " resStr:" + resStr + ",url:" + url + "]");
 
         if(advertInfo.getCpcCircut()!=null&&advertInfo.getCpcCircut()==1&&advertInfo.getCpcNum()!=null){
             try {
@@ -179,7 +179,7 @@ public class ReportLogController extends BaseController {
                 }
 
                 String cpcResStr = HttpClientUtil.httpGet(cpcUrl);
-                if (!StringUtils.isEmpty(cpcResStr)) {
+                if (!StringUtils.isEmpty(cpcResStr)&&!Constants.HTTP_RSP_FAIL.equals(cpcResStr)) {
                     BaseResult baseResult=GsonUtils.jsonToPojo(cpcResStr,BaseResult.class);
                     if(baseResult.getCode()==200){
                         logger.info("cpc report success,cpcUrl:{},res:{}",cpcUrl,cpcResStr);
