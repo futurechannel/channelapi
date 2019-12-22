@@ -127,8 +127,10 @@ public class ReportLogController extends BaseController {
         }
 
         String token=appInfo.getToken();
-        if (!StringUtils.isEmpty(token)) {
+        if ("sign".equals(token)) {
             url=url+"&"+token+"="+Md5.Md5(from+idfa+ Constants.JZFENHUO_GAMEID+Constants.JZFENHUO_SIGNKEY).toUpperCase();
+        } else if("accessToken".equals(token)) {
+            url = url +"&"+token+"="+Md5.Md5(from+idfa+"pa20191113");
         }
 
         //上报记录入库
