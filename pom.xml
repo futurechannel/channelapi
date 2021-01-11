@@ -207,6 +207,13 @@
             <version>3.3.2</version>
         </dependency>
 
+        <!--cat client-->
+        <dependency>
+            <groupId>com.dianping.cat</groupId>
+            <artifactId>cat-client</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
 
         <!--单元测试-->
         <dependency>
