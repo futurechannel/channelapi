@@ -1,6 +1,9 @@
 package com.channel.api.util;
 
 import com.channel.api.constants.Constants;
+import com.dianping.cat.Cat;
+import com.dianping.cat.message.Message;
+import com.dianping.cat.message.Transaction;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
@@ -21,28 +24,29 @@ public class HttpClientUtil {
 
     private static RequestConfig requestConfig = null;
 
-    private static CloseableHttpClient client=null;
+    private static CloseableHttpClient client = null;
 
-    static
-    {
+    static {
         // 设置请求和传输超时时间
         requestConfig = RequestConfig.custom().setSocketTimeout(2000).setConnectTimeout(2000).build();
         client = HttpClients.createDefault();
     }
 
 
-
     /**
      * 发送get请求
+     *
      * @param url 路径
      * @return
      */
     public static String httpGet(String url) {
-        String strResult=null;
+        String strResult = null;
 
         // 发送get请求
         HttpGet request = new HttpGet(url);
         request.setConfig(requestConfig);
+        Transaction transaction = Cat.newTransaction("HttpClient", "httpGet");
+        Cat.logEvent("httpClient", "urlGet", Message.SUCCESS, url);
         try {
             CloseableHttpResponse response = client.execute(request);
             // 请求发送成功，并得到响应
@@ -50,21 +54,28 @@ public class HttpClientUtil {
                 // 读取服务器返回过来的json字符串数据
                 HttpEntity entity = response.getEntity();
                 strResult = EntityUtils.toString(entity, "utf-8");
-                if(StringUtils.isEmpty(strResult)){
-                    strResult="";
+                if (StringUtils.isEmpty(strResult)) {
+                    strResult = "";
                 }
+                transaction.setStatus(Message.SUCCESS);
+
             } else {
-                logger.error("上报应用异常,code:"+response.getStatusLine().getStatusCode() +"url:" + url);
+                logger.error("上报应用异常,code:" + response.getStatusLine().getStatusCode() + "url:" + url);
+                transaction.setStatus("rspCode_" + response.getStatusLine().getStatusCode());
+
                 strResult = Constants.HTTP_RSP_FAIL;
             }
-        }
-        catch (IOException e) {
+
+        } catch (IOException e) {
+            transaction.setStatus(e);
             logger.error("上报应用IO异常:" + url, e);
             strResult = Constants.HTTP_RSP_FAIL;
-        }catch (Exception e){
+        } catch (Exception e) {
+            transaction.setStatus(e);
             logger.error("上报应用异常:" + url, e);
             strResult = Constants.HTTP_RSP_FAIL;
         } finally {
+            transaction.complete();
             request.releaseConnection();
         }
         return strResult;
