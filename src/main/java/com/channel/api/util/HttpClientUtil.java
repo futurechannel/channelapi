@@ -32,6 +32,10 @@ public class HttpClientUtil {
         client = HttpClients.createDefault();
     }
 
+    public static String httpGet(String url) {
+        return httpGet(url, null);
+    }
+
 
     /**
      * 发送get请求
@@ -39,14 +43,15 @@ public class HttpClientUtil {
      * @param url 路径
      * @return
      */
-    public static String httpGet(String url) {
+    public static String httpGet(String url, String appCode) {
         String strResult = null;
 
         // 发送get请求
         HttpGet request = new HttpGet(url);
         request.setConfig(requestConfig);
-        Transaction transaction = Cat.newTransaction("HttpClient", "httpGet");
-        Cat.logEvent("httpClient", "urlGet", Message.SUCCESS, url);
+        String catName = StringUtils.isEmpty(appCode) ? "sysGet" : appCode;
+        Transaction transaction = Cat.newTransaction("httpClientGet", catName);
+        Cat.logEvent("httpClientGet", catName, Message.SUCCESS, url);
         try {
             CloseableHttpResponse response = client.execute(request);
             // 请求发送成功，并得到响应

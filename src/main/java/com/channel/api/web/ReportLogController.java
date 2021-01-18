@@ -12,6 +12,7 @@ import com.channel.api.exception.ApiException;
 import com.channel.api.form.ReportLogForm;
 import com.channel.api.service.ReportLogService;
 import com.channel.api.util.*;
+import com.dianping.cat.Cat;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -137,14 +138,14 @@ public class ReportLogController extends BaseController {
             TreeMap<String, Object> params = new TreeMap<>();
             String opensysparams;
             try {
-            params.put("idfa", idfa);
-            params.put("ip", form.getIp());
-            params.put("company_name", from);
-            params.put("appid", appInfo.getAppId());
-            params.put("callbackurl", URLDecoder.decode(callback,"utf-8"));
-            params.put("client_id", "e4OFL9l6Tposocm0");
-            params.put("action", "youku.api.idfa.notification.click");
-            String sign = YouKuParamsUtil.get_sign(params,"knlklmkjcilmepgaidhmpfcfjdppinlj");
+                params.put("idfa", idfa);
+                params.put("ip", form.getIp());
+                params.put("company_name", from);
+                params.put("appid", appInfo.getAppId());
+                params.put("callbackurl", URLDecoder.decode(callback, "utf-8"));
+                params.put("client_id", "e4OFL9l6Tposocm0");
+                params.put("action", "youku.api.idfa.notification.click");
+                String sign = YouKuParamsUtil.get_sign(params, "knlklmkjcilmepgaidhmpfcfjdppinlj");
                 opensysparams = URLEncoder.encode(YouKuParamsUtil.opensysparams(params, sign), "utf-8");
             } catch (Exception e) {
                 logger.error("encode error", e);
@@ -174,7 +175,8 @@ public class ReportLogController extends BaseController {
 
         //转发请求给应用
 
-        String resStr = HttpClientUtil.httpGet(url);
+        Cat.logEvent("click_idfa", advertCode);
+        String resStr = HttpClientUtil.httpGet(url, appCode);
         if (Constants.HTTP_RSP_FAIL.equals(resStr)) {
             logger.error("report error:[" + "url:" + url + "]");
             throw new ApiException(ErrorCode.E901.getCode() + "");

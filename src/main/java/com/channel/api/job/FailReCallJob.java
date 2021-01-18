@@ -7,6 +7,8 @@ import com.channel.api.handler.CallBackHandler;
 import com.channel.api.service.CallBackService;
 import com.channel.api.service.FailCallbackService;
 import com.channel.api.util.DateUtils;
+import com.dianping.cat.Cat;
+import com.dianping.cat.message.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,41 +33,50 @@ public class FailReCallJob {
     @Autowired
     private CallBackService callBackService;
 
-    public void reCall(){
+    public void reCall() {
         LOG.info("@Scheduled-------failRecall()--start");
-        int pageSize=20;
-        Date now =new Date();
-        String start=DateUtils.defineDayBefore2Str(now,-1,"yyyy-MM-dd 00:00:00");
-        String end= DateUtils.formatDate2Str(now,"yyyy-MM-dd 00:00:00");
+        int pageSize = 20;
+        Date now = new Date();
+        String start = DateUtils.defineDayBefore2Str(now, -1, "yyyy-MM-dd 00:00:00");
+        String end = DateUtils.formatDate2Str(now, "yyyy-MM-dd 00:00:00");
 
-        FailCallback fail=new FailCallback();
+        FailCallback fail = new FailCallback();
         fail.setIsRecall(Constants.FAIL_CALL_ISRECALL_NO);
         fail.setIsBalance(Constants.FAIL_CALL_ISBLANCE_YES);
 
-        int count=failCallbackService.countFailCall(fail,start,end);
-        if(count<1){
+        int count = failCallbackService.countFailCall(fail, start, end);
+        if (count < 1) {
             LOG.info("@Scheduled======failRecall() is empty===end");
             return;
         }
 
-        int i=count/pageSize+1;
-        for(int j=0;j<i;j++){
-            List<FailCallback> list=failCallbackService.findList(fail,start,end,pageSize);
+        int i = count / pageSize + 1;
+        for (int j = 0; j < i; j++) {
+            List<FailCallback> list = failCallbackService.findList(fail, start, end, pageSize);
             if (CollectionUtils.isEmpty(list)) {
                 LOG.info("@Scheduled======failRecall() is empty===end");
                 return;
             }
 
-            for(FailCallback item:list){
+            for (FailCallback item : list) {
                 String result;
+                Transaction transaction = Cat.newTransaction("failReCallJob", item.getAdverterCode());
                 try {
                     result = handler.callBack(item.getCallback());
-                }catch (Exception e){
+                    if (Constants.CALL_BACK_SUC.equals(result)) {
+                        transaction.setStatus(Transaction.SUCCESS);
+                    } else {
+                        transaction.setStatus(Constants.CALL_BACK_FAIL);
+                    }
+                } catch (Exception e) {
+                    transaction.setStatus(e);
                     LOG.error("二次回调渠道接口异常");
-                    result=Constants.CALL_BACK_FAIL;
+                    result = Constants.CALL_BACK_FAIL;
+                } finally {
+                    transaction.complete();
                 }
 
-                if(Constants.CALL_BACK_SUC.equals(result)){
+                if (Constants.CALL_BACK_SUC.equals(result)) {
                     CallbackLog param = new CallbackLog();
                     param.setIdfa(item.getIdfa());
                     param.setAppCode(item.getAppCode());
@@ -73,17 +84,17 @@ public class FailReCallJob {
                     param.setUpdateTime(new Date());
                     param.setIsCall(Constants.CALL_BACK_ISCALL_YES);
                     param.setIsFinish(Constants.CALL_BACK_ISFINISH_YES);
-                    LOG.info("二次回调渠道成功:"+param.toString());
+                    LOG.info("二次回调渠道成功:" + param.toString());
                     try {
                         callBackService.updateStatus(param);
-                    }catch (Exception e){
-                        LOG.error("===更新二次回调记录状态异常",e);
+                    } catch (Exception e) {
+                        LOG.error("===更新二次回调记录状态异常", e);
                     }
                 } else {
-                    LOG.error("二次回调渠道失败:"+item.toString());
+                    LOG.error("二次回调渠道失败:" + item.toString());
                 }
 
-                FailCallback failParam=new FailCallback();
+                FailCallback failParam = new FailCallback();
                 failParam.setIdfa(item.getIdfa());
                 failParam.setAppCode(item.getAppCode());
                 failParam.setIsBalance(Constants.FAIL_CALL_ISBLANCE_YES);
@@ -92,8 +103,8 @@ public class FailReCallJob {
 
                 try {
                     failCallbackService.updateStatus(failParam);
-                }catch (Exception e){
-                    LOG.error("===更新二次回调失败记录状态异常",e);
+                } catch (Exception e) {
+                    LOG.error("===更新二次回调失败记录状态异常", e);
                     return;
                 }
 
@@ -101,7 +112,6 @@ public class FailReCallJob {
         }
 
         LOG.info("@Scheduled======failRecall() is end===end");
-
 
 
     }
