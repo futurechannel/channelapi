@@ -26,7 +26,7 @@
 
     <bean id="callBackJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="callBackJobDetail"/>
-        <property name="cronExpression" value="0 0/5 * * * ? "/>
+        <property name="cronExpression" value="0 0/2 * * * ? "/>
     </bean>
 
     <bean id="failReCallJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
