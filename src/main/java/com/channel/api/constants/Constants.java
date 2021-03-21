@@ -32,4 +32,7 @@ public class Constants {
 
     public static final String HTTP_RSP_FAIL= "http_error";
 
+    public static final String URL_PARAM_SEPARATOR = "&";
+    public static final String OUR_CALL_BACK_POSTFIX = "/channelapi/callback/app?";
+
 }

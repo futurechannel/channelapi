@@ -7,7 +7,6 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class ReportLogForm {
 
-    @NotEmpty
     private String idfa;
     @NotEmpty
     private String ref;
@@ -19,6 +18,8 @@ public class ReportLogForm {
     private String clickid;
     private String userAgent;
     private String appcode;
+    private String caid;
+    private String model;
 
     public String getIdfa() {
         return idfa;
@@ -82,5 +83,21 @@ public class ReportLogForm {
 
     public void setAppcode(String appcode) {
         this.appcode = appcode;
+    }
+
+    public String getCaid() {
+        return caid;
+    }
+
+    public void setCaid(String caid) {
+        this.caid = caid;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 }

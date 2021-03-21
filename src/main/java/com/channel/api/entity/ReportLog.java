@@ -14,6 +14,7 @@ public class ReportLog {
     private String callback;
     private Integer isCpcReport;
     private Date reportTime;
+    private Integer idType;
 
     public String getIdfa() {
         return idfa;
@@ -71,6 +72,14 @@ public class ReportLog {
         this.isCpcReport = isCpcReport;
     }
 
+    public Integer getIdType() {
+        return idType;
+    }
+
+    public void setIdType(Integer idType) {
+        this.idType = idType;
+    }
+
     @Override
     public String toString() {
         return "ReportLog{" +
@@ -81,6 +90,7 @@ public class ReportLog {
                 ", callback='" + callback + '\'' +
                 ", isCpcReport=" + isCpcReport +
                 ", reportTime=" + reportTime +
+                ", idType=" + idType +
                 '}';
     }
 }

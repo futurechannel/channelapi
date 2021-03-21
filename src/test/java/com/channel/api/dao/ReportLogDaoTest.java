@@ -63,7 +63,7 @@ public class ReportLogDaoTest {
 
     @Test
     public void findById() throws Exception{
-        ReportLog log=reportLogDao.findById("1","ele","report_log");
+        ReportLog log=reportLogDao.findById("1dwdw1","zh3","report_log_20210321");
         if(log!=null){
             System.out.println(log);
         }

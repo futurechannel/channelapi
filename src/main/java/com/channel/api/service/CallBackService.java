@@ -1,5 +1,8 @@
 package com.channel.api.service;
 
+import com.channel.api.dto.UniqueIdDto;
+import com.channel.api.entity.AdvertInfo;
+import com.channel.api.entity.AppInfo;
 import com.channel.api.entity.CallbackLog;
 
 import java.util.Date;
@@ -15,4 +18,6 @@ public interface CallBackService {
     int updateStatus(CallbackLog callbackLog);
 
     int insertCallBack(CallbackLog callbackLog);
+
+    String generateCallbackUrl(UniqueIdDto uniqueIdDto, AdvertInfo advertInfo, AppInfo appInfo);
 }

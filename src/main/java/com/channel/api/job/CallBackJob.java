@@ -90,6 +90,9 @@ public class CallBackJob {
                     failCall.setCreateTime(new Date());
                     failCall.setIsRecall(Constants.FAIL_CALL_ISRECALL_NO);
                     failCall.setIsBalance(item.getIsBalance());
+                    if (null != item.getIdType()) {
+                        failCall.setIdType(item.getIdType());
+                    }
                     LOG.error("回调失败，存入回调失败表:" + failCall.toString());
 
                     failCallbackService.insertFailCallback(failCall);

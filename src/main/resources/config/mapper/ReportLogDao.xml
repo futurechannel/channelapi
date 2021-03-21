@@ -9,6 +9,7 @@
 		<id property="callback" column="callback"/>
 		<id property="isCpcReport" column="is_cpc_report"/>
 		<id property="reportTime" column="report_time"/>
+		<id property="idType" column="id_type"/>
 	</resultMap>
 
 	<select id="queryAll" resultType="reportLog">
@@ -19,8 +20,9 @@
 	</select>
 
 	<insert id="insert">
-		INSERT INTO ${tableName}(idfa, adverter_code, app_code, click_id,callback, report_time,is_cpc_report)
-		VALUES (#{log.idfa}, #{log.adverterCode}, #{log.appCode}, #{log.clickId},#{log.callback}, #{log.reportTime},#{log.isCpcReport})
+		INSERT INTO ${tableName}(idfa, adverter_code, app_code, click_id,callback, report_time,is_cpc_report,id_type)
+		VALUES (#{log.idfa}, #{log.adverterCode}, #{log.appCode}, #{log.clickId},#{log.callback}, #{log.reportTime}
+		,#{log.isCpcReport},#{log.idType})
 	</insert>
 
 	<select id="findById" resultType="reportLog">

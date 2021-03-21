@@ -10,14 +10,12 @@ import com.channel.api.exception.ApiException;
 import com.channel.api.form.EleBackForm;
 import com.channel.api.service.CallBackService;
 import com.channel.api.service.ReportLogService;
-import com.channel.api.util.ConfigUtils;
 import com.channel.api.util.GsonUtils;
 import com.channel.api.util.NumUtils;
 import com.dianping.cat.Cat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -64,6 +62,9 @@ public class CallBackController extends BaseController {
         if (log == null) {
             callbackLog.setIsBalance(0);
             logger.warn("未查到idfa记录[" + idfa + "]");
+            if (form.getType() != null) {
+                callbackLog.setIdType(form.getType());
+            }
         } else {
             if (!StringUtils.isEmpty(log.getCallback())) {
                 callbackLog.setCallback(log.getCallback());
@@ -75,6 +76,12 @@ public class CallBackController extends BaseController {
             } else {
                 callbackLog.setIsBalance(0);
                 callbackLog.setAdverterCode(log.getAdverterCode());
+            }
+
+            if (null != log.getIdType()) {
+                callbackLog.setIdType(log.getIdType());
+            } else if (null != form.getType()) {
+                callbackLog.setIdType(form.getType());
             }
 
         }

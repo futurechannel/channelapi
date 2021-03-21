@@ -10,4 +10,6 @@ import java.util.List;
 public interface AppInfoService {
 
     List<AppInfo> findAll();
+
+    AppInfo  getAppInfoFromMemCache(String appcode,String appid);
 }

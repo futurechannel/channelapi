@@ -19,13 +19,13 @@ public class ConstantMaps {
 
     public static Map<String, Integer> balanceMap = new HashMap<>();
 
-    public static Map<String,AdvertInfo> advertInfoMap=new HashMap<>();
+    public static Map<String, AdvertInfo> advertInfoMap = new HashMap<>();
 
-    public static Map<String,List<String>> reportTables=new HashMap<>();
+    public static Map<String, List<String>> reportTables = new HashMap<>();
 
-    private static List<String> reportTableName=new ArrayList<>();
+    private static List<String> reportTableName = new ArrayList<>();
 
-    public static void setReportTables(Map<String,List<String>> reportTables) {
+    public static void setReportTables(Map<String, List<String>> reportTables) {
         ConstantMaps.reportTables = reportTables;
     }
 
@@ -50,6 +50,9 @@ public class ConstantMaps {
     }
 
     public static AppInfo getAppInfoByCode(String code) {
+        if (StringUtils.isEmpty(code)) {
+            return null;
+        }
         if (appCodeMap.containsKey(code)) {
             return appCodeMap.get(code);
         }
@@ -57,6 +60,9 @@ public class ConstantMaps {
     }
 
     public static AppInfo getAppCode(String appId) {
+        if (StringUtils.isEmpty(appId)) {
+            return null;
+        }
         if (appIdMap.containsKey(appId)) {
             return appIdMap.get(appId);
         }
@@ -70,12 +76,12 @@ public class ConstantMaps {
 
         String key = getBalanceKey(appCode, advertCode);
 
-        Integer balance=balanceMap.get(key);
+        Integer balance = balanceMap.get(key);
 
-        return balance!=null?balance:Integer.parseInt(ConfigUtils.getValue("default.reduce.per"));
+        return balance != null ? balance : Integer.parseInt(ConfigUtils.getValue("default.reduce.per"));
     }
 
-    public static AdvertInfo getAdvertInfo(String appCode, String advertCode){
+    public static AdvertInfo getAdvertInfo(String appCode, String advertCode) {
         String key = getBalanceKey(appCode, advertCode);
         return advertInfoMap.get(key);
     }
@@ -85,7 +91,7 @@ public class ConstantMaps {
         return advertCode + "-" + appCode;
     }
 
-    public static String getReportTableName(){
+    public static String getReportTableName() {
         return reportTableName.get(0);
     }
 
@@ -93,7 +99,7 @@ public class ConstantMaps {
         ConstantMaps.reportTableName = reportTableNames;
     }
 
-    public static List<String> getReportTableNames(String appCode){
+    public static List<String> getReportTableNames(String appCode) {
         return reportTables.get(appCode);
     }
 }

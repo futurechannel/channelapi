@@ -16,6 +16,7 @@ public class CallbackLog {
     private Integer isBalance;
     private Date createTime;
     private Date updateTime;
+    private Integer idType;
 
     public String getIdfa() {
         return idfa;
@@ -97,6 +98,14 @@ public class CallbackLog {
         this.updateTime = updateTime;
     }
 
+    public Integer getIdType() {
+        return idType;
+    }
+
+    public void setIdType(Integer idType) {
+        this.idType = idType;
+    }
+
     @Override
     public String toString() {
         return "CallbackLog{" +
@@ -110,6 +119,7 @@ public class CallbackLog {
                 ", isBalance=" + isBalance +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", idType=" + idType +
                 '}';
     }
 }

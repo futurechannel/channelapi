@@ -12,6 +12,7 @@ public class EleBackForm {
     private String user_ip;
     @NotEmpty
     private String appcode;
+    private Integer type;
 
     public String getIdfa() {
         return idfa;
@@ -43,5 +44,13 @@ public class EleBackForm {
 
     public void setAppcode(String appcode) {
         this.appcode = appcode;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

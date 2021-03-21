@@ -13,6 +13,7 @@
         <id property="isBalance" column="is_balance"/>
         <id property="createTime" column="create_time"/>
         <id property="updateTime" column="update_time"/>
+		<id property="idType" column="id_type"/>
     </resultMap>
 
     <select id="findList" resultType="callbackLog">
@@ -34,9 +35,9 @@
 
     <insert id="insertCallBack">
 		INSERT INTO callback_log(
-		idfa, adverter_code, app_code, ip, callback, is_call, is_finish, is_balance,create_time
+		idfa, adverter_code, app_code, ip, callback, is_call, is_finish, is_balance,create_time,id_type
 		)VALUES (
-		#{idfa}, #{adverterCode}, #{appCode}, #{ip}, #{callback}, #{isCall}, #{isFinish}, #{isBalance},#{createTime}
+		#{idfa}, #{adverterCode}, #{appCode}, #{ip}, #{callback}, #{isCall}, #{isFinish}, #{isBalance},#{createTime},#{idType}
 		)
 	</insert>
 

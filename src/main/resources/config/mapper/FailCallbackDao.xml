@@ -10,14 +10,15 @@
         <id property="isBalance" column="is_balance"/>
         <id property="createTime" column="create_time"/>
         <id property="updateTime" column="update_time"/>
+        <id property="idType" column="id_type"/>
     </resultMap>
 
 
     <insert id="insertFailCallback">
 		INSERT INTO fail_callback(
-		idfa, adverter_code, app_code, callback, is_recall, is_balance,create_time
+		idfa, adverter_code, app_code, callback, is_recall, is_balance,create_time,id_type
 		)VALUES (
-		#{idfa}, #{adverterCode}, #{appCode}, #{callback}, #{isRecall}, #{isBalance},#{createTime}
+		#{idfa}, #{adverterCode}, #{appCode}, #{callback}, #{isRecall}, #{isBalance},#{createTime},#{idType}
 		)
 	</insert>
 

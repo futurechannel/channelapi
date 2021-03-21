@@ -214,6 +214,13 @@
             <version>3.0.0</version>
         </dependency>
 
+        <!--hu tool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>5.6.1</version>
+        </dependency>
+
 
         <!--单元测试-->
         <dependency>

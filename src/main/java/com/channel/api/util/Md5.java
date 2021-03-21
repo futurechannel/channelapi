@@ -22,7 +22,7 @@ public class Md5 {
 			}
 			return new String(str);
 		} catch (Exception e) {
-			return null;
+			return "";
 		}
 	}
 	public final static String Md5(String s,String encoding) {
@@ -42,7 +42,7 @@ public class Md5 {
 			}
 			return new String(str);
 		} catch (Exception e) {
-			return null;
+			return "";
 		}
 	}
 
