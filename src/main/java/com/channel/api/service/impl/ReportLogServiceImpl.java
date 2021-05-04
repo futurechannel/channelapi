@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
@@ -120,7 +121,12 @@ public class ReportLogServiceImpl implements ReportLogService {
         values[1] = StringFormatUtils.formatNull(advertInfo.getComeFrom());
         values[2] = StringFormatUtils.formatNull(callbackUrl);
         values[3] = StringFormatUtils.formatNull(logForm.getCaid());
-        values[4] = StringFormatUtils.formatNull(logForm.getUserAgent());
+        try {
+            values[4] = URLEncoder.encode(StringFormatUtils.formatNull(logForm.getUserAgent()), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            LOG.error("encode 转码错误", e);
+            throw new ApiException(ErrorCode.E906.getCode() + "");
+        }
         values[5] = StringFormatUtils.formatNull(logForm.getIp());
         values[6] = StringFormatUtils.formatNull(logForm.getModel());
 

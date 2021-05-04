@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 
 public class HttpClientUtil {
@@ -84,6 +85,18 @@ public class HttpClientUtil {
             request.releaseConnection();
         }
         return strResult;
+    }
+
+    public static void main(String[] args) throws Exception {
+        String url = "http://iphone.v0.mgtv.com/ggt.php?idfa=&from=xinguo&callback=http%3A%2F%2Fapi.appleadx.com%2Fchannelapi%" +
+                "2Fcallback%2Fapp%3Fidfa%3D0293668275884d778717b1602c0c1080%26appcode%3Dzmangguo%26type%3D3&caid=&" +
+                "userAgent=" + URLEncoder.encode("Mozilla/5.0 (iPhone; CPU iPhone OS 14_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148", "utf-8") +
+                "&ip=183.15.177.182&model=iPhone13,1&pos=0";
+        System.out.println("url:" + url);
+        System.out.println();
+        System.out.println(URLEncoder.encode("","utf-8"));
+        String resStr = HttpClientUtil.httpGet(url, "zmangguo");
+        System.out.println(resStr);
     }
 
 
