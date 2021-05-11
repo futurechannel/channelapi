@@ -20,6 +20,7 @@ public class ReportLogForm {
     private String appcode;
     private String caid;
     private String model;
+    private String click_time;
 
     public String getIdfa() {
         return idfa;
@@ -99,5 +100,13 @@ public class ReportLogForm {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public String getClick_time() {
+        return click_time;
+    }
+
+    public void setClick_time(String click_time) {
+        this.click_time = click_time;
     }
 }
