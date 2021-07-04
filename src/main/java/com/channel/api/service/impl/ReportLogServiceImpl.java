@@ -130,6 +130,7 @@ public class ReportLogServiceImpl implements ReportLogService {
         values[5] = StringFormatUtils.formatNull(logForm.getIp());
         values[6] = StringFormatUtils.formatNull(logForm.getModel());
         values[7] = StringFormatUtils.formatNull(logForm.getClick_time());
+        values[8] = StringFormatUtils.formatNull(logForm.getMac());
 
         String url = StringFormatUtils.format(appInfo.getReportUrl(), values);
 

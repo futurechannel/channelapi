@@ -21,6 +21,7 @@ public class ReportLogForm {
     private String caid;
     private String model;
     private String click_time;
+    private String mac;
 
     public String getIdfa() {
         return idfa;
@@ -108,5 +109,13 @@ public class ReportLogForm {
 
     public void setClick_time(String click_time) {
         this.click_time = click_time;
+    }
+
+    public String getMac() {
+        return mac;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
     }
 }
